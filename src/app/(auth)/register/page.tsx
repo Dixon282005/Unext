@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
+import { Button } from "@/app/components/ui/elements/button";
+import { Input } from "@/app/components/ui/forms/input";
+import { Label } from "@/app/components/ui/forms/label";
 import { Github, Mail } from "lucide-react";
 
 export default function RegisterPage() {

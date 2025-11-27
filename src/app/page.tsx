@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { Features } from './components/Features';
-import { TrustedBy } from './components/TrustedBy';
-import { HowItWorks } from './components/HowItWorks';
-import { Stats } from './components/Stats';
-import { Testimonials } from './components/Testimonials';
-import { Opportunities } from './components/Opportunities';
-import { Candidates } from './components/Candidates';
-import { Footer } from './components/Footer';
+import { LandingHeader } from './components/landing/layout/LandingHeader';
+import { LandingHero } from './components/landing/sections/LandingHero';
+import { LandingFeatures } from './components/landing/sections/LandingFeatures';
+import { LandingTrustedBy } from './components/landing/sections/LandingTrustedBy';
+import { LandingHowItWorks } from './components/landing/sections/LandingHowItWorks';
+import { LandingStats } from './components/landing/sections/LandingStats';
+import { LandingTestimonials } from './components/landing/sections/LandingTestimonials';
+import { LandingOpportunities } from './components/landing/sections/LandingOpportunities';
+import { LandingCandidates } from './components/landing/sections/LandingCandidates';
+import { LandingFooter } from './components/landing/layout/LandingFooter';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<'home' | 'opportunities' | 'candidates'>('home');
@@ -32,7 +32,7 @@ export default function App() {
         ? 'bg-[#0A0A0A]' 
         : 'bg-white'
     }`}>
-      <Header 
+      <LandingHeader 
         activeSection={activeSection} 
         setActiveSection={setActiveSection}
         isDark={isDark}
@@ -42,19 +42,19 @@ export default function App() {
       
       {activeSection === 'home' && (
         <>
-          <Hero setActiveSection={setActiveSection} isDark={isDark} />
-          <TrustedBy isDark={isDark} />
-          <Features isDark={isDark} />
-          <HowItWorks isDark={isDark} />
-          <Stats isDark={isDark} />
-          <Testimonials isDark={isDark} />
+          <LandingHero setActiveSection={setActiveSection} isDark={isDark} />
+          <LandingTrustedBy isDark={isDark} />
+          <LandingFeatures isDark={isDark} />
+          <LandingHowItWorks isDark={isDark} />
+          <LandingStats isDark={isDark} />
+          <LandingTestimonials isDark={isDark} />
         </>
       )}
       
-      {activeSection === 'opportunities' && <Opportunities isDark={isDark} />}
-      {activeSection === 'candidates' && <Candidates isDark={isDark} />}
+      {activeSection === 'opportunities' && <LandingOpportunities isDark={isDark} />}
+      {activeSection === 'candidates' && <LandingCandidates isDark={isDark} />}
       
-      <Footer isDark={isDark} />
+      <LandingFooter isDark={isDark} />
     </div>
   );
 }
