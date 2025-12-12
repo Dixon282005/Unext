@@ -1,5 +1,5 @@
 // -----------------------------------------------------
-// ENUMS (Nuevos y Actualizados)
+// ENUMS
 // -----------------------------------------------------
 export type UserRole = "admin" | "company" | "user";
 export type JobStatus = "active" | "closed" | "draft";
@@ -7,20 +7,18 @@ export type ApplicationStatus =
   | "pending"
   | "accepted"
   | "rejected"
-  | "interview"; // Agregado interview
-
+  | "interview";
 export type JobType =
   | "full_time"
   | "part_time"
   | "contract"
   | "internship"
   | "freelance"
-  | "volunteering"; // Agregado para pasantías sin fines de lucro
-
+  | "volunteering";
 export type JobModality = "onsite" | "remote" | "hybrid";
 export type ProfileVisibility = "public" | "private" | "connections_only";
 
-// NUEVOS ENUMS
+// Nuevos Enums
 export type CurrencyType = "USD" | "VES";
 export type PaymentPeriod = "monthly" | "hourly" | "project" | "one_time";
 export type EducationLevel =
@@ -33,44 +31,67 @@ export type EducationLevel =
   | "other";
 
 // -----------------------------------------------------
-// AUTH USER (Lo que te devuelve supabase.auth.getUser())
+// CATALOGS (Tablas auxiliares locales)
 // -----------------------------------------------------
-export interface AuthUser {
-  id: string;
-  email: string;
-  // password_hash NO se maneja en el frontend por seguridad
+
+export interface State {
+  id: number;
+  name: string; // "Aragua", "Carabobo"
+}
+
+export interface City {
+  id: number;
+  state_id: number;
+  name: string; // "Maracay", "Valencia"
+  // Opcional para Joins
+  states?: State;
+}
+
+export interface CareerCatalog {
+  id: number;
+  name: string; // "Ingeniería de Sistemas"
+  area: string | null;
+}
+
+export interface JobCategory {
+  id: number;
+  name: string;
   created_at: string;
-  last_sign_in_at?: string;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
 }
 
 // -----------------------------------------------------
 // PUBLIC PROFILE (Tabla: profiles)
 // -----------------------------------------------------
 export interface UserProfile {
-  id: string; // Es igual al user_id de auth
+  id: string;
   role: UserRole;
   full_name: string | null;
   bio: string | null;
 
-  // Ubicación mejorada (Google Places)
-  city: string | null; // Nombre legible "Caracas"
-  country: string | null; // "Venezuela"
-  location_lat?: number | null;
-  location_lng?: number | null;
-  google_place_id?: string | null;
+  // UBICACIÓN LOCAL (Relación con tus tablas)
+  city_id: number | null;
+  // Mantenemos city_text por si el usuario no encontró su ciudad en la lista
+  city_text: string | null;
+  country: string | null; // "Venezuela" por defecto
 
   phone: string | null;
   linkedin_url: string | null;
   github_url: string | null;
   portfolio_url: string | null;
-  avatar_url: string | null; // Corregido de profile_photo_url a avatar_url (según SQL)
+  avatar_url: string | null;
 
-  // Estado
   is_active: boolean;
   is_blocked: boolean;
-
   created_at: string;
   updated_at: string;
+
+  // Para mostrar el nombre de la ciudad bonita en el frontend
+  cities?: City;
 }
 
 // -----------------------------------------------------
@@ -78,7 +99,7 @@ export interface UserProfile {
 // -----------------------------------------------------
 export interface CompanyProfile {
   id: string;
-  user_id: string; // Dueño de la empresa
+  user_id: string;
   company_name: string | null;
   description: string | null;
   industry: string | null;
@@ -86,17 +107,20 @@ export interface CompanyProfile {
   logo_url: string | null;
   verified: boolean;
 
-  // Ubicación
-  city: string | null;
+  // Ubicación Empresa
+  city_id: number | null;
   country: string | null;
   phone: string | null;
 
   created_at: string;
   updated_at: string;
+
+  // Join
+  cities?: City;
 }
 
 // -----------------------------------------------------
-// JOBS (Tabla: company_jobs) - CAMBIOS IMPORTANTES
+// JOBS (Tabla: company_jobs)
 // -----------------------------------------------------
 export interface CompanyJob {
   id: string;
@@ -109,27 +133,26 @@ export interface CompanyJob {
   modality: JobModality;
   category_id: number | null;
 
-  // Ubicación
-  location: string | null; // Texto legible
-  location_lat?: number | null;
-  location_lng?: number | null;
-  google_place_id?: string | null;
+  // UBICACIÓN LOCAL
+  city_id: number | null;
 
-  // >>> NUEVA LÓGICA DE SALARIOS <<<
-  currency: CurrencyType; // 'USD' | 'VES'
-  salary_min: number | null; // Antes string, ahora number
-  salary_max: number | null; // Nuevo
-  payment_period: PaymentPeriod; // Nuevo
-  is_unpaid: boolean; // Nuevo (True = "A convenir" o Pasantía)
-  is_salary_visible: boolean; // Nuevo (Para ocultar monto exacto)
+  // PAGOS Y MONEDA
+  currency: CurrencyType;
+  salary_min: number | null;
+  salary_max: number | null;
+  payment_period: PaymentPeriod;
+  is_unpaid: boolean;
+  is_salary_visible: boolean;
 
   status: JobStatus;
   is_active: boolean;
   created_at: string;
   updated_at: string;
 
-  // Opcional: Para cuando haces JOIN con la empresa
+  // Joins comunes
   company_profiles?: CompanyProfile;
+  job_categories?: JobCategory;
+  cities?: City; // Para mostrar "Maracay" en vez del ID 45
 }
 
 // -----------------------------------------------------
@@ -141,64 +164,50 @@ export interface JobApplication {
   user_id: string;
   status: ApplicationStatus;
 
-  // Nuevos campos
-  resume_url: string | null; // PDF del CV
+  resume_url: string | null;
   cover_letter: string | null;
 
   created_at: string;
 
-  // Opcional: Para JOINs
+  // Joins
   company_jobs?: CompanyJob;
   profiles?: UserProfile;
 }
 
 // -----------------------------------------------------
-// EDUCATION (Tabla: education) - CAMBIOS IMPORTANTES
+// EDUCATION (Tabla: education)
 // -----------------------------------------------------
 export interface Education {
   id: string;
   user_id: string;
   institution_name: string;
 
-  level: EducationLevel; // Nuevo enum
-  degree_name: string | null; // Título específico
+  level: EducationLevel;
+  degree_name: string | null;
 
-  // Relación con catálogo (si aplica)
+  // RELACIÓN CON TU CATÁLOGO
   career_id?: number | null;
-  title_text: string; // Texto de respaldo
+  title_text: string; // Lo que escribió si no usó el catálogo
 
   field_of_study?: string | null;
   start_date: string | null;
   end_date: string | null;
   currently_studying: boolean;
   created_at: string;
+
+  // Join para mostrar el nombre oficial
+  career_catalog?: CareerCatalog;
 }
 
 // -----------------------------------------------------
-// CAREER CATALOG (Tabla: career_catalog) - NUEVO
+// OTRAS (Sin cambios mayores)
 // -----------------------------------------------------
-export interface CareerCatalog {
-  id: number;
-  name: string;
-  area: string | null;
-}
-
-// -----------------------------------------------------
-// OTRAS TABLAS (Sin cambios mayores)
-// -----------------------------------------------------
-
-export interface JobCategory {
-  id: number;
-  name: string;
-  created_at: string;
-}
 
 export interface SavedJob {
   id: string;
   user_id: string;
   job_id: string;
   created_at: string;
-  // Opcional join
   company_jobs?: CompanyJob;
 }
 
@@ -224,12 +233,6 @@ export interface Notification {
   created_at: string;
 }
 
-// TAGS
-export interface Tag {
-  id: string;
-  name: string;
-}
-
 export interface UserSettings {
   id: string;
   user_id: string;
@@ -237,13 +240,5 @@ export interface UserSettings {
   receive_email_notifications: boolean;
   receive_push_notifications: boolean;
   profile_visibility: ProfileVisibility;
-  created_at: string;
-}
-
-export interface UserActivityLog {
-  id: string;
-  user_id: string;
-  action: string | null;
-  metadata: string | null; // En Supabase esto suele ser JSON, en TS string o any
   created_at: string;
 }
