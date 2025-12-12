@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
-import Link from 'next/link';
-import { Zap } from 'lucide-react';
+import { ReactNode } from "react";
+import Link from "next/link";
+import { Zap } from "lucide-react";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -10,7 +10,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           <div className="w-10 h-10 bg-black dark:bg-white rounded-xl flex items-center justify-center text-white dark:text-black transition-transform group-hover:scale-110">
             <Zap className="w-6 h-6" fill="currentColor" />
           </div>
-          <span className="text-2xl font-bold text-neutral-900 dark:text-white">Unext</span>
+          <span className="text-2xl font-bold text-neutral-900 dark:text-white">
+            Unext
+          </span>
         </Link>
       </div>
 

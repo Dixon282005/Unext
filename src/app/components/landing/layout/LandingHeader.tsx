@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap, Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";

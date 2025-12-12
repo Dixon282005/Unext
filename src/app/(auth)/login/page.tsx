@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Button } from "@/app/components/ui/elements/button";
 import { Input } from "@/app/components/ui/forms/input";
 import { Label } from "@/app/components/ui/forms/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/app/components/ui/layout/card";
 import { Github, Mail } from "lucide-react";
 
 export default function LoginPage() {

@@ -1,131 +1,173 @@
 // -----------------------------------------------------
-// ENUMS
+// ENUMS (Nuevos y Actualizados)
 // -----------------------------------------------------
 export type UserRole = "admin" | "company" | "user";
 export type JobStatus = "active" | "closed" | "draft";
-export type ApplicationStatus = "pending" | "accepted" | "rejected";
+export type ApplicationStatus =
+  | "pending"
+  | "accepted"
+  | "rejected"
+  | "interview"; // Agregado interview
+
 export type JobType =
   | "full_time"
   | "part_time"
   | "contract"
   | "internship"
-  | "freelance";
+  | "freelance"
+  | "volunteering"; // Agregado para pasantías sin fines de lucro
+
 export type JobModality = "onsite" | "remote" | "hybrid";
 export type ProfileVisibility = "public" | "private" | "connections_only";
 
+// NUEVOS ENUMS
+export type CurrencyType = "USD" | "VES";
+export type PaymentPeriod = "monthly" | "hourly" | "project" | "one_time";
+export type EducationLevel =
+  | "high_school"
+  | "technical"
+  | "undergraduate"
+  | "postgraduate"
+  | "bootcamp"
+  | "course"
+  | "other";
+
 // -----------------------------------------------------
-// USERS
+// AUTH USER (Lo que te devuelve supabase.auth.getUser())
 // -----------------------------------------------------
-export interface User {
+export interface AuthUser {
   id: string;
   email: string;
-  password_hash: string;
-  role: UserRole;
-  is_blocked: boolean;
-  is_active: boolean;
-  last_seen: string | null;
+  // password_hash NO se maneja en el frontend por seguridad
   created_at: string;
-  updated_at: string;
+  last_sign_in_at?: string;
 }
 
 // -----------------------------------------------------
-// USER PROFILE
+// PUBLIC PROFILE (Tabla: profiles)
 // -----------------------------------------------------
 export interface UserProfile {
-  id: string;
-  user_id: string;
+  id: string; // Es igual al user_id de auth
+  role: UserRole;
   full_name: string | null;
   bio: string | null;
-  city: string | null;
-  country: string | null;
+
+  // Ubicación mejorada (Google Places)
+  city: string | null; // Nombre legible "Caracas"
+  country: string | null; // "Venezuela"
+  location_lat?: number | null;
+  location_lng?: number | null;
+  google_place_id?: string | null;
+
   phone: string | null;
   linkedin_url: string | null;
   github_url: string | null;
   portfolio_url: string | null;
-  profile_photo_url: string | null;
-  verified: boolean;
+  avatar_url: string | null; // Corregido de profile_photo_url a avatar_url (según SQL)
+
+  // Estado
+  is_active: boolean;
+  is_blocked: boolean;
+
   created_at: string;
   updated_at: string;
 }
 
 // -----------------------------------------------------
-// COMPANY PROFILE
+// COMPANY PROFILE (Tabla: company_profiles)
 // -----------------------------------------------------
 export interface CompanyProfile {
   id: string;
-  user_id: string;
+  user_id: string; // Dueño de la empresa
   company_name: string | null;
   description: string | null;
   industry: string | null;
   website: string | null;
-  phone: string | null;
-  city: string | null;
-  country: string | null;
   logo_url: string | null;
   verified: boolean;
+
+  // Ubicación
+  city: string | null;
+  country: string | null;
+  phone: string | null;
+
   created_at: string;
   updated_at: string;
 }
 
 // -----------------------------------------------------
-// JOB CATEGORY
-// -----------------------------------------------------
-export interface JobCategory {
-  id: number;
-  name: string;
-  created_at: string;
-}
-
-// -----------------------------------------------------
-// COMPANY JOBS
+// JOBS (Tabla: company_jobs) - CAMBIOS IMPORTANTES
 // -----------------------------------------------------
 export interface CompanyJob {
   id: string;
   company_id: string;
-  title: string | null;
-  description: string | null;
+  title: string;
+  description: string;
   requirements_text: string | null;
-  type: JobType | null;
-  modality: JobModality | null;
-  location: string | null;
-  salary_range: string | null;
+
+  type: JobType;
+  modality: JobModality;
   category_id: number | null;
+
+  // Ubicación
+  location: string | null; // Texto legible
+  location_lat?: number | null;
+  location_lng?: number | null;
+  google_place_id?: string | null;
+
+  // >>> NUEVA LÓGICA DE SALARIOS <<<
+  currency: CurrencyType; // 'USD' | 'VES'
+  salary_min: number | null; // Antes string, ahora number
+  salary_max: number | null; // Nuevo
+  payment_period: PaymentPeriod; // Nuevo
+  is_unpaid: boolean; // Nuevo (True = "A convenir" o Pasantía)
+  is_salary_visible: boolean; // Nuevo (Para ocultar monto exacto)
+
   status: JobStatus;
   is_active: boolean;
   created_at: string;
   updated_at: string;
+
+  // Opcional: Para cuando haces JOIN con la empresa
+  company_profiles?: CompanyProfile;
 }
 
 // -----------------------------------------------------
-// JOB APPLICATIONS
+// JOB APPLICATIONS (Tabla: job_applications)
 // -----------------------------------------------------
 export interface JobApplication {
   id: string;
   job_id: string;
   user_id: string;
   status: ApplicationStatus;
+
+  // Nuevos campos
+  resume_url: string | null; // PDF del CV
+  cover_letter: string | null;
+
   created_at: string;
+
+  // Opcional: Para JOINs
+  company_jobs?: CompanyJob;
+  profiles?: UserProfile;
 }
 
 // -----------------------------------------------------
-// SAVED JOBS
-// -----------------------------------------------------
-export interface SavedJob {
-  id: string;
-  user_id: string;
-  job_id: string;
-  created_at: string;
-}
-
-// -----------------------------------------------------
-// EDUCATION
+// EDUCATION (Tabla: education) - CAMBIOS IMPORTANTES
 // -----------------------------------------------------
 export interface Education {
   id: string;
   user_id: string;
-  institution_name: string | null;
-  degree: string | null;
-  field_of_study: string | null;
+  institution_name: string;
+
+  level: EducationLevel; // Nuevo enum
+  degree_name: string | null; // Título específico
+
+  // Relación con catálogo (si aplica)
+  career_id?: number | null;
+  title_text: string; // Texto de respaldo
+
+  field_of_study?: string | null;
   start_date: string | null;
   end_date: string | null;
   currently_studying: boolean;
@@ -133,8 +175,33 @@ export interface Education {
 }
 
 // -----------------------------------------------------
-// EXPERIENCE
+// CAREER CATALOG (Tabla: career_catalog) - NUEVO
 // -----------------------------------------------------
+export interface CareerCatalog {
+  id: number;
+  name: string;
+  area: string | null;
+}
+
+// -----------------------------------------------------
+// OTRAS TABLAS (Sin cambios mayores)
+// -----------------------------------------------------
+
+export interface JobCategory {
+  id: number;
+  name: string;
+  created_at: string;
+}
+
+export interface SavedJob {
+  id: string;
+  user_id: string;
+  job_id: string;
+  created_at: string;
+  // Opcional join
+  company_jobs?: CompanyJob;
+}
+
 export interface Experience {
   id: string;
   user_id: string;
@@ -147,9 +214,6 @@ export interface Experience {
   created_at: string;
 }
 
-// -----------------------------------------------------
-// NOTIFICATIONS
-// -----------------------------------------------------
 export interface Notification {
   id: string;
   user_id: string;
@@ -160,31 +224,12 @@ export interface Notification {
   created_at: string;
 }
 
-// -----------------------------------------------------
 // TAGS
-// -----------------------------------------------------
 export interface Tag {
   id: string;
   name: string;
 }
 
-// USER ↔ TAG
-export interface UserTag {
-  id: string;
-  user_id: string;
-  tag_id: string;
-}
-
-// JOB ↔ TAG
-export interface JobTag {
-  id: string;
-  job_id: string;
-  tag_id: string;
-}
-
-// -----------------------------------------------------
-// USER SETTINGS
-// -----------------------------------------------------
 export interface UserSettings {
   id: string;
   user_id: string;
@@ -195,13 +240,10 @@ export interface UserSettings {
   created_at: string;
 }
 
-// -----------------------------------------------------
-// USER ACTIVITY LOGS
-// -----------------------------------------------------
 export interface UserActivityLog {
   id: string;
   user_id: string;
   action: string | null;
-  metadata: string | null;
+  metadata: string | null; // En Supabase esto suele ser JSON, en TS string o any
   created_at: string;
 }
