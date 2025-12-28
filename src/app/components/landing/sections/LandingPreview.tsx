@@ -32,7 +32,7 @@ export function PlatformPreview({ isDark }: PlatformPreviewProps) {
               ? 'bg-white/5 border border-white/10 backdrop-blur-sm' 
               : 'bg-white/80 border border-purple-200/50 backdrop-blur-sm shadow-lg shadow-purple-100'
           }`}>
-            <Sparkles className={`w-4 h-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+           
             <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
               Plataforma intuitiva y moderna
             </span>

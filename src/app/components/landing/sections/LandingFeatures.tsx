@@ -68,10 +68,8 @@ export function Features({ isDark }: FeaturesProps) {
               ? 'bg-white/5 border border-white/10' 
               : 'bg-gray-100 border border-gray-200'
           }`}>
-            <Zap className={`w-4 h-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-            <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
-              Características
-            </span>
+           
+          
           </div>
           
           <h2 className="text-5xl mb-6">

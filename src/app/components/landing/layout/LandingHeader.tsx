@@ -21,7 +21,7 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isDark 
         ? `${isScrolled ? 'bg-[#0A0A0A]/95 backdrop-blur-xl shadow-2xl shadow-purple-900/20 border-b border-white/10' : 'bg-transparent'}` 
-        : `${isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-300/50 border-b border-gray-200' : 'bg-transparent'}`
+        : `${isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-300/50  border-gray-200' : 'bg-transparent'}`
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex justify-between items-center transition-all duration-500 ${

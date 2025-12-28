@@ -48,16 +48,16 @@ export function TrustedBy({ isDark }: TrustedByProps) {
   }, []);
 
   const universities = [
-    { name: 'Universidad Nacional', logo: '🎓', color: 'from-blue-500 to-blue-600' },
-    { name: 'Instituto Tecnológico', logo: '🏛️', color: 'from-purple-500 to-purple-600' },
-    { name: 'Universidad de Buenos Aires', logo: '📚', color: 'from-cyan-500 to-cyan-600' },
-    { name: 'Universidad de Chile', logo: '🎯', color: 'from-violet-500 to-violet-600' },
-    { name: 'UNAM', logo: '🏆', color: 'from-amber-500 to-amber-600' },
-    { name: 'Universidad de los Andes', logo: '⚡', color: 'from-emerald-500 to-emerald-600' },
-    { name: 'Universidad Javeriana', logo: '🌟', color: 'from-yellow-500 to-yellow-600' },
-    { name: 'Universidad Católica', logo: '💎', color: 'from-pink-500 to-pink-600' },
-    { name: 'Universidad Tecnológica', logo: '🚀', color: 'from-red-500 to-red-600' },
-    { name: 'Instituto Politécnico', logo: '🔬', color: 'from-indigo-500 to-indigo-600' },
+    { name: 'UCV', logo: '🎓', color: 'from-blue-500 to-blue-600' },
+    { name: 'USB', logo: '🏛️', color: 'from-purple-500 to-purple-600' },
+    { name: 'UCAB', logo: '📚', color: 'from-cyan-500 to-cyan-600' },
+    { name: 'UNIMET', logo: '🎯', color: 'from-violet-500 to-violet-600' },
+    { name: 'UNERG', logo: '🏆', color: 'from-amber-500 to-amber-600' },
+    { name: 'LUZ', logo: '⚡', color: 'from-emerald-500 to-emerald-600' },
+    { name: 'UNEXPO', logo: '🌟', color: 'from-yellow-500 to-yellow-600' },
+    { name: 'UC', logo: '💎', color: 'from-pink-500 to-pink-600' },
+    { name: 'UCLA', logo: '🚀', color: 'from-red-500 to-red-600' },
+    { name: 'ULA', logo: '🔬', color: 'from-indigo-500 to-indigo-600' },
   ];
 
   // Duplicamos para el efecto infinito

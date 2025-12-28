@@ -153,7 +153,7 @@ export function Footer({ isDark }: FooterProps) {
                 isDark ? 'text-gray-400' : 'text-gray-600'
               }`}>
                 <MapPin className={`w-5 h-5 ${isDark ? 'text-purple-500' : 'text-purple-700'}`} />
-                <span>Latinoamérica</span>
+                <span>Venezuela</span>
               </li>
             </ul>
           </div>
