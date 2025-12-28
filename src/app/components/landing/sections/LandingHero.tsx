@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight, Sparkles, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

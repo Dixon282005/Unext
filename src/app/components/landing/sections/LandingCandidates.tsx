@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 import { Search, MapPin, GraduationCap, Mail, Star, ExternalLink } from 'lucide-react';
 import { ImageWithFallback } from '../../figma/ImageWithFallback';

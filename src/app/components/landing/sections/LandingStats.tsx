@@ -1,3 +1,5 @@
+"use client";
+
 import { TrendingUp, Users, Building2, Zap } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 

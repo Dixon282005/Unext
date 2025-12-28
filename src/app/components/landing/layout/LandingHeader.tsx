@@ -1,6 +1,9 @@
+"use client";
+
 import { Zap, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface HeaderProps {
   activeSection: 'home' | 'opportunities' | 'candidates';
@@ -8,11 +11,9 @@ interface HeaderProps {
   isDark: boolean;
   setIsDark: (isDark: boolean) => void;
   scrollY: number;
-  onNavigateToLogin?: () => void;
-  onNavigateToRegister?: () => void;
 }
 
-export function Header({ activeSection, setActiveSection, isDark, setIsDark, scrollY, onNavigateToLogin, onNavigateToRegister }: HeaderProps) {
+export function Header({ activeSection, setActiveSection, isDark, setIsDark, scrollY }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isScrolled = scrollY > 20;
 
@@ -129,18 +130,24 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <button className={`px-5 py-2.5 transition-colors ${
-              isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-[#0A0A0A]'
-            }`} onClick={onNavigateToLogin}>
+            <Link 
+              href="/login"
+              className={`px-5 py-2.5 transition-colors ${
+                isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-[#0A0A0A]'
+              }`}
+            >
               Ingresar
-            </button>
-            <button className={`relative px-5 py-2.5 rounded-full transition-all ${
-              isDark 
-                ? 'bg-white text-[#0A0A0A] hover:bg-gray-100' 
-                : 'bg-[#0A0A0A] text-white hover:bg-gray-900'
-            }`} onClick={onNavigateToRegister}>
+            </Link>
+            <Link 
+              href="/register"
+              className={`relative px-5 py-2.5 rounded-full transition-all ${
+                isDark 
+                  ? 'bg-white text-[#0A0A0A] hover:bg-gray-100' 
+                  : 'bg-[#0A0A0A] text-white hover:bg-gray-900'
+              }`}
+            >
               Comenzar
-            </button>
+            </Link>
           </div>
 
           <button 
@@ -216,20 +223,26 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
                 {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                 {isDark ? 'Modo Claro' : 'Modo Oscuro'}
               </button>
-              <button className={`w-full px-6 py-3 transition-colors rounded-xl ${
-                isDark 
-                  ? 'text-gray-300 hover:text-white hover:bg-white/5' 
-                  : 'text-gray-700 hover:text-[#0A0A0A] hover:bg-gray-100'
-              }`} onClick={onNavigateToLogin}>
+              <Link 
+                href="/login"
+                className={`block text-center w-full px-6 py-3 transition-colors rounded-xl ${
+                  isDark 
+                    ? 'text-gray-300 hover:text-white hover:bg-white/5' 
+                    : 'text-gray-700 hover:text-[#0A0A0A] hover:bg-gray-100'
+                }`}
+              >
                 Ingresar
-              </button>
-              <button className={`w-full px-6 py-3 rounded-xl transition-all ${
-                isDark 
-                  ? 'bg-white text-[#0A0A0A] hover:bg-gray-100' 
-                  : 'bg-[#0A0A0A] text-white hover:bg-gray-900'
-              }`} onClick={onNavigateToRegister}>
+              </Link>
+              <Link 
+                href="/register"
+                className={`block text-center w-full px-6 py-3 rounded-xl transition-all ${
+                  isDark 
+                    ? 'bg-white text-[#0A0A0A] hover:bg-gray-100' 
+                    : 'bg-[#0A0A0A] text-white hover:bg-gray-900'
+                }`}
+              >
                 Comenzar
-              </button>
+              </Link>
             </div>
           </div>
         </div>

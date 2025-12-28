@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 import { Search, MapPin, Clock, DollarSign, Briefcase, Bookmark, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../../figma/ImageWithFallback';
