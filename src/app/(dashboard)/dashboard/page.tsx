@@ -325,7 +325,7 @@ export default function DashboardClient({
       location: "Remoto",
       type: "Tiempo completo",
       salary: "$25,000 - $35,000",
-      posted: "2h",
+      postedDate: "2h",
       applicants: 45,
       match: 95,
       saved: true,
@@ -342,7 +342,7 @@ export default function DashboardClient({
       location: "Híbrido",
       type: "Tiempo completo",
       salary: "$20,000 - $30,000",
-      posted: "5h",
+      postedDate: "5h",
       applicants: 32,
       match: 88,
       saved: false,
@@ -358,7 +358,7 @@ export default function DashboardClient({
       location: "CDMX",
       type: "Tiempo completo",
       salary: "$30,000 - $40,000",
-      posted: "1d",
+      postedDate: "1d",
       applicants: 28,
       match: 82,
       saved: true,
@@ -374,7 +374,7 @@ export default function DashboardClient({
       location: "Remoto",
       type: "Tiempo completo",
       salary: "$22,000 - $32,000",
-      posted: "2d",
+      postedDate: "2d",
       applicants: 52,
       match: 90,
       saved: false,
@@ -390,7 +390,7 @@ export default function DashboardClient({
       location: "Guadalajara",
       type: "Tiempo completo",
       salary: "$23,000 - $33,000",
-      posted: "3d",
+      postedDate: "3d",
       applicants: 38,
       match: 85,
       saved: false,
@@ -406,7 +406,7 @@ export default function DashboardClient({
       location: "Remoto",
       type: "Tiempo completo",
       salary: "$28,000 - $38,000",
-      posted: "4d",
+      postedDate: "4d",
       applicants: 41,
       match: 78,
       saved: true,
@@ -1183,7 +1183,7 @@ export default function DashboardClient({
                         <div className="flex items-start gap-3">
                           <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0 text-sm md:text-base">
                             {userType === "student"
-                              ? job.logo
+                              ? (job as any).logo
                               : job.title.substring(0, 2).toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -1200,7 +1200,7 @@ export default function DashboardClient({
                               }`}
                             >
                               {userType === "student"
-                                ? job.company
+                                ? (job as any).company
                                 : `${job.applicants} aplicantes`}
                             </p>
                             <div className="flex items-center gap-3 text-xs">
@@ -1216,9 +1216,7 @@ export default function DashboardClient({
                                   isDark ? "text-gray-500" : "text-gray-500"
                                 }
                               >
-                                {userType === "student"
-                                  ? job.posted
-                                  : job.postedDate}
+                                {job.postedDate}
                               </span>
                             </div>
                           </div>
