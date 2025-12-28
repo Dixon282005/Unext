@@ -1,5 +1,3 @@
-"use client";
-
 import { TrendingUp, Users, Building2, Zap } from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 
@@ -76,7 +74,7 @@ function AnimatedStat({
   );
 }
 
-export function LandingStats({ isDark }: StatsProps) {
+export function Stats({ isDark }: StatsProps) {
   const stats = [
     {
       icon: Users,
@@ -167,15 +165,15 @@ export function LandingStats({ isDark }: StatsProps) {
                 {/* Animated Number */}
                 <div className={`text-5xl md:text-6xl mb-4 text-center transition-colors duration-500 ${
                   isDark 
-                    ? 'text-white group-hover:text-purple-400' 
-                    : 'text-[#0A0A0A] group-hover:text-purple-600'
+                    ? 'text-white' 
+                    : 'text-[#0A0A0A]'
                 }`}>
                   <AnimatedStat value={stat.value} suffix={stat.suffix} duration={2000} />
                 </div>
 
                 {/* Label */}
                 <div className={`text-xl mb-3 text-center ${
-                  isDark ? 'text-gray-300' : 'text-gray-700'
+                  isDark ? 'text-gray-300' : 'text-[#0A0A0A]'
                 }`}>
                   {stat.label}
                 </div>

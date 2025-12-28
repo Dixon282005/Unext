@@ -18,7 +18,7 @@ export default function App() {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = () => {a
       setScrollY(window.scrollY);
     };
 

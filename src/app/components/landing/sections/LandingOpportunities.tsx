@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from 'react';
 import { Search, MapPin, Clock, DollarSign, Briefcase, Bookmark, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../../figma/ImageWithFallback';
@@ -8,7 +6,7 @@ interface OpportunitiesProps {
   isDark: boolean;
 }
 
-export function LandingOpportunities({ isDark }: OpportunitiesProps) {
+export function Opportunities({ isDark }: OpportunitiesProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');

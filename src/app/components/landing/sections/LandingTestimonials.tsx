@@ -1,11 +1,11 @@
 import { Star, Quote } from 'lucide-react';
-import { ImageWithFallback } from '../../figma/ImageWithFallback';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 
 interface TestimonialsProps {
   isDark: boolean;
 }
 
-export function LandingTestimonials({ isDark }: TestimonialsProps) {
+export function Testimonials({ isDark }: TestimonialsProps) {
   const testimonials = [
     {
       id: 1,
@@ -48,11 +48,22 @@ export function LandingTestimonials({ isDark }: TestimonialsProps) {
   return (
     <section className="py-24 relative overflow-hidden">
       {/* Background effects */}
-      <div className={`absolute inset-0 transition-opacity duration-1000 ${
-        isDark ? 'opacity-100' : 'opacity-0'
-      }`}>
-        <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-violet-900/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Efecto modo claro */}
+        {!isDark && (
+          <>
+            <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-purple-300/50 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-violet-300/50 rounded-full blur-3xl animate-pulse"></div>
+          </>
+        )}
+        
+        {/* Efecto modo oscuro */}
+        {isDark && (
+          <>
+            <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-violet-900/20 rounded-full blur-3xl animate-pulse"></div>
+          </>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -103,19 +114,16 @@ export function LandingTestimonials({ isDark }: TestimonialsProps) {
                 <p className={`text-lg mb-6 leading-relaxed ${
                   isDark ? 'text-gray-300' : 'text-gray-700'
                 }`}>
-                  &quot;{testimonial.quote}&quot;
+                  "{testimonial.quote}"
                 </p>
 
                 {/* Author */}
                 <div className="flex items-center gap-4">
                   <div className="relative">
-                    <div className={`absolute inset-0 rounded-2xl blur-lg opacity-50 ${
-                      isDark ? 'bg-purple-500' : 'bg-purple-600'
-                    }`}></div>
                     <ImageWithFallback
                       src={testimonial.image}
                       alt={testimonial.name}
-                      className="relative w-16 h-16 rounded-2xl object-cover"
+                      className="w-16 h-16 rounded-2xl object-cover"
                     />
                   </div>
                   <div>

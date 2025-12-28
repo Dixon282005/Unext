@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from 'react';
 import { Search, MapPin, GraduationCap, Mail, Star, ExternalLink } from 'lucide-react';
 import { ImageWithFallback } from '../../figma/ImageWithFallback';
@@ -8,7 +6,7 @@ interface CandidatesProps {
   isDark: boolean;
 }
 
-export function LandingCandidates({ isDark }: CandidatesProps) {
+export function Candidates({ isDark }: CandidatesProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCareer, setSelectedCareer] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');

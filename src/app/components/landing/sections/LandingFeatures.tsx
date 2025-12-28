@@ -4,7 +4,7 @@ interface FeaturesProps {
   isDark: boolean;
 }
 
-export function LandingFeatures({ isDark }: FeaturesProps) {
+export function Features({ isDark }: FeaturesProps) {
   const features = [
     {
       icon: Users,
@@ -41,12 +41,24 @@ export function LandingFeatures({ isDark }: FeaturesProps) {
   return (
     <section className="py-24 relative overflow-hidden">
       {/* Background effects */}
-      <div className={`absolute inset-0 transition-opacity duration-1000 ${
-        isDark ? 'opacity-100' : 'opacity-0'
-      }`}>
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-        <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-fuchsia-900/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }}></div>
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Efecto modo claro */}
+        {!isDark && (
+          <>
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-300/50 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-300/50 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-purple-200/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }}></div>
+          </>
+        )}
+        
+        {/* Efecto modo oscuro */}
+        {isDark && (
+          <>
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-900/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-fuchsia-900/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }}></div>
+          </>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">

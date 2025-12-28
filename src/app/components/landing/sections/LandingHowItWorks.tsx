@@ -4,7 +4,7 @@ interface HowItWorksProps {
   isDark: boolean;
 }
 
-export function LandingHowItWorks({ isDark }: HowItWorksProps) {
+export function HowItWorks({ isDark }: HowItWorksProps) {
   const steps = [
     {
       icon: UserPlus,
@@ -59,89 +59,55 @@ export function LandingHowItWorks({ isDark }: HowItWorksProps) {
           </p>
         </div>
 
-        <div className="max-w-5xl mx-auto">
+        {/* Steps as horizontal cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {steps.map((step, index) => (
             <div
               key={index}
-              className={`relative mb-12 last:mb-0 opacity-0 animate-[fadeIn_0.8s_ease-in-out_forwards]`}
+              className={`opacity-0 animate-[fadeIn_0.8s_ease-in-out_forwards]`}
               style={{ animationDelay: `${0.2 + index * 0.15}s` }}
             >
-              <div className={`flex flex-col md:flex-row items-center gap-8 p-8 md:p-12 rounded-3xl transition-all duration-500 group hover:scale-[1.02] ${
+              <div className={`h-full p-6 rounded-xl transition-all duration-500 group hover:scale-105 ${
                 isDark 
-                  ? 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/20' 
-                  : 'bg-white border border-gray-200 hover:bg-gray-50 hover:border-purple-600/50 hover:shadow-2xl hover:shadow-purple-600/20'
+                  ? 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 hover:shadow-xl hover:shadow-white/10' 
+                  : 'bg-white border border-gray-200 hover:border-gray-300 hover:shadow-xl'
               }`}>
                 
-                {/* Left side - Number and Icon */}
-                <div className="flex-shrink-0 flex items-center gap-6">
-                  {/* Large Number */}
-                  <div className={`text-7xl md:text-8xl transition-colors duration-500 ${
-                    isDark 
-                      ? 'text-white/10 group-hover:text-purple-500/30' 
-                      : 'text-gray-200 group-hover:text-purple-600/30'
-                  }`}>
-                    {step.number}
-                  </div>
-
-                  {/* Icon */}
-                  <div className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center shadow-xl transition-all duration-500 group-hover:rotate-6 group-hover:scale-110 ${
-                    isDark 
-                      ? 'bg-purple-600 text-white' 
-                      : 'bg-purple-700 text-white'
-                  }`}>
-                    <step.icon className="w-10 h-10 md:w-12 md:h-12" />
-                  </div>
+                {/* Number badge */}
+                <div className={`inline-flex items-center justify-center w-10 h-10 rounded-full mb-4 text-sm ${
+                  isDark 
+                    ? 'bg-white/10 text-purple-400' 
+                    : 'bg-gray-100 text-purple-600'
+                }`}>
+                  {step.number}
                 </div>
 
-                {/* Right side - Content */}
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className={`text-3xl md:text-4xl mb-4 ${
-                    isDark ? 'text-white' : 'text-[#0A0A0A]'
-                  }`}>
-                    {step.title}
-                  </h3>
-                  <p className={`text-lg md:text-xl leading-relaxed ${
-                    isDark ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
-                    {step.description}
-                  </p>
+                {/* Icon */}
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition-all duration-500 group-hover:scale-110 ${
+                  isDark 
+                    ? 'bg-purple-600 text-white' 
+                    : 'bg-purple-700 text-white'
+                }`}>
+                  <step.icon className="w-6 h-6" />
                 </div>
 
-                {/* Decorative corner accent */}
-                <div className={`absolute top-6 right-6 w-12 h-12 rounded-full transition-all duration-500 opacity-0 group-hover:opacity-100 ${
-                  isDark ? 'bg-purple-500/20' : 'bg-purple-600/20'
-                } blur-xl`}></div>
+                {/* Content */}
+                <h3 className={`text-xl mb-3 ${
+                  isDark ? 'text-white' : 'text-[#0A0A0A]'
+                }`}>
+                  {step.title}
+                </h3>
+                <p className={`text-sm leading-relaxed ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  {step.description}
+                </p>
               </div>
-
-              {/* Connector line - only show between items */}
-              {index < steps.length - 1 && (
-                <div className="flex justify-center my-6">
-                  <div className={`w-1 h-12 rounded-full ${
-                    isDark 
-                      ? 'bg-gradient-to-b from-purple-600 to-violet-600' 
-                      : 'bg-gradient-to-b from-purple-700 to-violet-700'
-                  }`}></div>
-                </div>
-              )}
             </div>
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-20 opacity-0 animate-[fadeIn_1s_ease-in-out_1s_forwards]">
-          <p className={`text-xl mb-6 ${
-            isDark ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            ¿Listo para dar el primer paso?
-          </p>
-          <button className={`group px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 ${
-            isDark 
-              ? 'bg-white text-[#0A0A0A] hover:bg-gray-100 shadow-lg shadow-white/10' 
-              : 'bg-[#0A0A0A] text-white hover:bg-gray-900 shadow-xl'
-          }`}>
-            Comenzar ahora gratis
-          </button>
-        </div>
+        {/* Removed CTA */}
       </div>
     </section>
   );
