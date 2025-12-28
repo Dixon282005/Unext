@@ -1,11 +1,3 @@
-¡Claro que sí! Tu proyecto ya tiene una arquitectura seria (Next.js 15, Supabase, Features, Roles) y un diseño profesional, así que el `README` por defecto se queda muy corto.
-
-Aquí tienes un **README.md** de nivel profesional, diseñado para impresionar a reclutadores, colaboradores o para tu portafolio.
-
-Copia y pega el siguiente código en tu archivo `README.md`.
-
----
-
 ```markdown
 # 🚀 Unext
 
