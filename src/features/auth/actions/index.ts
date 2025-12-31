@@ -1,4 +1,4 @@
-"use server" // <--- OBLIGATORIO: Define que esto corre en el servidor
+"use server"
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
@@ -10,59 +10,74 @@ import { revalidatePath } from 'next/cache'
 export async function loginAction(formData: FormData) {
   const supabase = await createClient()
 
-  // Extraemos los datos del formulario
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  // Intentamos loguear en Supabase
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
   if (error) {
-    // Si falla, retornamos el error para que el frontend lo pinte en rojo
     console.error('Login error:', error.message)
     return { error: 'Credenciales inválidas. Verifica tu correo y contraseña.' }
   }
 
-  // SI TODO SALE BIEN:
-  // 1. Limpiamos la caché para que la barra de navegación se entere que entraste
   revalidatePath('/', 'layout')
-  
-  // 2. Redirigimos al Dashboard
   redirect('/dashboard') 
 }
 
 // =================================================================
-// 2. REGISTRO (SIGNUP)
+// 2. REGISTRO (SIGNUP) - ¡CON VALIDACIONES DE SEGURIDAD! 🛡️
 // =================================================================
 export async function signupAction(formData: FormData) {
   const supabase = await createClient()
 
-  // Extraemos los datos (asegúrate que tus inputs tengan name="...")
+  // 1. Extraemos TODOS los datos
   const firstName = formData.get('name') as string
   const lastName = formData.get('lastname') as string
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const confirmPassword = formData.get('confirmPassword') as string
+  
+  // Si no viene rol, asumimos 'user' por seguridad
+  const role = (formData.get('role') as string) || 'user' 
 
-  // Validamos que no falte nada
+  // 2. Validaciones Básicas (Campos vacíos)
   if (!email || !password || !firstName || !lastName) {
     return { error: 'Por favor completa todos los campos.' }
   }
 
-  // Creamos el nombre completo
+  // 3. VALIDACIÓN DE CONTRASEÑA ROBUSTA 🔐
+  
+  // A) Coincidencia
+  if (password !== confirmPassword) {
+    return { error: 'Las contraseñas no coinciden.' }
+  }
+
+  // B) Longitud mínima (8 caracteres)
+  if (password.length < 8) {
+    return { error: 'La contraseña debe tener al menos 8 caracteres.' }
+  }
+
+  // C) Caracteres especiales (Regex)
+  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+  if (!specialCharRegex.test(password)) {
+    return { error: 'La contraseña debe incluir al menos un carácter especial (ej: @, #, !).' }
+  }
+
+  // 4. Creamos el nombre completo
   const fullName = `${firstName} ${lastName}`.trim()
 
-  // Creamos el usuario
+  // 5. Creamos el usuario en Supabase
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // Guardamos el nombre en la metadata.
-      // IMPORTANTE: Esto es lo que usa tu Trigger SQL para llenar la tabla 'profiles'
+      // Pasamos el rol en la metadata para que el Trigger de SQL lo capture
       data: {
         full_name: fullName, 
+        role: role, 
       },
     },
   })
@@ -72,9 +87,7 @@ export async function signupAction(formData: FormData) {
     return { error: error.message }
   }
 
-  // SI TODO SALE BIEN:
-  // Redirigimos al login avisando que revisen el correo (si tienes confirmación de email activa)
-  // O simplemente para que inicien sesión.
+  // Éxito
   redirect('/login') 
 }
 
@@ -83,13 +96,7 @@ export async function signupAction(formData: FormData) {
 // =================================================================
 export async function logoutAction() {
   const supabase = await createClient()
-  
-  // Cerramos la sesión en el servidor
   await supabase.auth.signOut()
-  
-  // Limpiamos caché para que la barra de navegación borre el usuario
   revalidatePath('/', 'layout')
-  
-  // Lo mandamos al login de vuelta
-  redirect('/login')
+  redirect('/login') 
 }
