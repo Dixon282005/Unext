@@ -59,21 +59,7 @@ export function Header({
       }`}
     >
       <div className="flex items-center gap-4">
-        {/* Botón hamburguesa (Mobile/Desktop toggle) */}
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className={`p-2 rounded-lg transition-all duration-200 ${
-            isDark
-              ? "hover:bg-gray-800 text-gray-400 hover:text-white"
-              : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          {sidebarOpen ? (
-            <ChevronLeft className="w-5 h-5" />
-          ) : (
-            <Menu className="w-5 h-5" />
-          )}
-        </button>
+        
 
         {/* Título de la sección actual */}
         <div className="hidden md:block">

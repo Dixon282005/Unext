@@ -29,7 +29,7 @@ export default function DashboardClient({
   
   // 1. ESTADOS GLOBALES DE LA APP
   const [activeTab, setActiveTab] = useState("overview");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
   // 2. ESTADOS DE INTERFAZ (Header/Sidebar)
@@ -68,8 +68,7 @@ export default function DashboardClient({
         
         {/* HEADER SUPERIOR */}
         <Header
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
+          
           isDark={isDark}
           setIsDark={setIsDark}
           activeTab={activeTab}
