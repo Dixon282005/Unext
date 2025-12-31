@@ -118,7 +118,7 @@ export function Candidates({ isDark }: CandidatesProps) {
     <section className="pt-32 pb-20 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 opacity-0 animate-[fadeIn_0.8s_ease-in-out_forwards]">
-          <h1 className={`text-5xl mb-4 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
+          <h1 className={`text-3xl md:text-5xl mb-4 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
             Encuentra el{' '}
             <span className={isDark ? 'text-purple-500' : 'text-purple-600'}>
               talento perfecto
@@ -135,7 +135,7 @@ export function Candidates({ isDark }: CandidatesProps) {
             ? 'bg-white/5 border border-white/10' 
             : 'bg-white border border-gray-200 shadow-lg'
         }`}>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
               <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
                 isDark ? 'text-gray-400' : 'text-gray-500'
@@ -189,7 +189,7 @@ export function Candidates({ isDark }: CandidatesProps) {
         </div>
         
         {/* Candidates Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCandidates.map((candidate, index) => (
             <div 
               key={candidate.id} 
@@ -202,12 +202,12 @@ export function Candidates({ isDark }: CandidatesProps) {
             >
               {/* Header */}
               <div className={`h-32 relative ${
-                isDark ? 'bg-gradient-to-r from-purple-900 to-violet-900' : 'bg-gradient-to-r from-purple-700 to-purple-800'
+                isDark ? 'bg-linear-to-r from-purple-900 to-violet-900' : 'bg-linear-to-r from-purple-700 to-purple-800'
               }`}>
                 <div className={`absolute inset-0 ${
                   isDark 
-                    ? 'bg-gradient-to-b from-transparent to-[#0A0A0A]/50' 
-                    : 'bg-gradient-to-b from-transparent to-white/50'
+                    ? 'bg-linear-to-b from-transparent to-[#0A0A0A]/50' 
+                    : 'bg-linear-to-b from-transparent to-white/50'
                 }`}></div>
               </div>
               
@@ -261,7 +261,7 @@ export function Candidates({ isDark }: CandidatesProps) {
                   <div className={`flex items-start gap-2 ${
                     isDark ? 'text-gray-400' : 'text-gray-600'
                   }`}>
-                    <GraduationCap className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                    <GraduationCap className="w-5 h-5 shrink-0 mt-0.5" />
                     <div>
                       <div className={isDark ? 'text-gray-300' : 'text-gray-700'}>
                         {candidate.career}
@@ -278,7 +278,7 @@ export function Candidates({ isDark }: CandidatesProps) {
                   <div className={`flex items-center gap-2 ${
                     isDark ? 'text-gray-400' : 'text-gray-600'
                   }`}>
-                    <MapPin className="w-5 h-5 flex-shrink-0" />
+                    <MapPin className="w-5 h-5 shrink-0" />
                     <span>{candidate.location}</span>
                   </div>
                 </div>

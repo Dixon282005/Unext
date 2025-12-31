@@ -5,7 +5,7 @@ import { Sidebar } from "@/features/dashboard/components/sidebar";
 import { Header } from "@/features/dashboard/components/header";
 import { logoutAction } from "@/features/auth/actions";
 
-// --- IMPORTAMOS TUS NUEVOS FEATURES (VISTAS) ---
+// --- IMPORTAMOS FEATURES (VISTAS) ---
 import { OverviewView } from "@/features/dashboard/views/overview-view";
 import { JobsView } from "@/features/jobs/views/jobs-view";
 import { CandidatesView } from "@/features/candidates/views/candidates-view";
@@ -68,7 +68,8 @@ export default function DashboardClient({
         
         {/* HEADER SUPERIOR */}
         <Header
-          
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
           isDark={isDark}
           setIsDark={setIsDark}
           activeTab={activeTab}

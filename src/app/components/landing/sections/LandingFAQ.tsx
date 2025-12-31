@@ -42,7 +42,7 @@ export function FAQ({ isDark }: FAQProps) {
             </span>
           </div>
           
-          <h2 className={`text-4xl mb-4 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
+          <h2 className={`text-3xl md:text-4xl mb-4 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
             Resolvemos tus <span className={isDark ? 'text-purple-500' : 'text-purple-600'}>dudas</span>
           </h2>
         </div>
@@ -58,16 +58,16 @@ export function FAQ({ isDark }: FAQProps) {
               }`}
             >
               <button
-                className="w-full px-8 py-6 flex items-center justify-between text-left focus:outline-none"
+                className="w-full px-4 md:px-8 py-6 flex items-center justify-between text-left focus:outline-none"
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
                 <span className={`text-lg font-medium pr-8 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
                   {faq.question}
                 </span>
                 {openIndex === index ? (
-                  <Minus className={`w-5 h-5 flex-shrink-0 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                  <Minus className={`w-5 h-5 shrink-0 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
                 ) : (
-                  <Plus className={`w-5 h-5 flex-shrink-0 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
+                  <Plus className={`w-5 h-5 shrink-0 ${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
                 )}
               </button>
               <div 

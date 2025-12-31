@@ -20,8 +20,8 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isDark 
-        ? `${isScrolled ? 'bg-[#0A0A0A]/95 backdrop-blur-xl shadow-2xl shadow-purple-900/20 border-b border-white/10' : 'bg-transparent'}` 
-        : `${isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-300/50  border-gray-200' : 'bg-transparent'}`
+        ? `${isScrolled || mobileMenuOpen ? 'bg-[#0A0A0A]/95 backdrop-blur-xl shadow-2xl shadow-purple-900/20 border-b border-white/10' : 'bg-transparent'}` 
+        : `${isScrolled || mobileMenuOpen ? 'bg-white/95 backdrop-blur-xl shadow-2xl shadow-gray-300/50  border-gray-200' : 'bg-transparent'}`
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex justify-between items-center transition-all duration-500 ${
@@ -151,8 +151,8 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
           </div>
 
           <button 
-            className={`md:hidden transition-colors ${
-              isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-[#0A0A0A]'
+            className={`md:hidden p-2 rounded-lg transition-colors ${
+              isDark ? 'text-gray-300 hover:text-white hover:bg-white/10' : 'text-gray-700 hover:text-[#0A0A0A] hover:bg-gray-100'
             }`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -163,15 +163,15 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className={`md:hidden backdrop-blur-xl transition-colors ${
+        <div className={`md:hidden absolute top-full left-0 w-full h-screen pb-20 overflow-y-auto backdrop-blur-xl transition-colors border-t ${
           isDark 
-            ? 'bg-[#0A0A0A]/95 border-t border-white/10' 
-            : 'bg-white/95 border-t border-gray-200'
+            ? 'bg-[#0A0A0A]/95 border-white/10' 
+            : 'bg-white/95 border-gray-200'
         }`}>
           <div className="px-4 py-6 space-y-3">
             <button
               onClick={() => { setActiveSection('home'); setMobileMenuOpen(false); }}
-              className={`w-full px-6 py-3 rounded-xl text-left transition-all ${
+              className={`w-full px-6 py-4 rounded-xl text-left text-lg font-medium transition-all ${
                 activeSection === 'home' 
                   ? isDark 
                     ? 'bg-white text-[#0A0A0A]' 
@@ -185,7 +185,7 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
             </button>
             <button
               onClick={() => { setActiveSection('opportunities'); setMobileMenuOpen(false); }}
-              className={`w-full px-6 py-3 rounded-xl text-left transition-all ${
+              className={`w-full px-6 py-4 rounded-xl text-left text-lg font-medium transition-all ${
                 activeSection === 'opportunities' 
                   ? isDark 
                     ? 'bg-white text-[#0A0A0A]' 
@@ -199,7 +199,7 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
             </button>
             <button
               onClick={() => { setActiveSection('candidates'); setMobileMenuOpen(false); }}
-              className={`w-full px-6 py-3 rounded-xl text-left transition-all ${
+              className={`w-full px-6 py-4 rounded-xl text-left text-lg font-medium transition-all ${
                 activeSection === 'candidates' 
                   ? isDark 
                     ? 'bg-white text-[#0A0A0A]' 
@@ -211,10 +211,10 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
             >
               Talento
             </button>
-            <div className="pt-4 space-y-2">
+            <div className="pt-4 space-y-3 border-t border-gray-200 dark:border-gray-800">
               <button 
                 onClick={() => setIsDark(!isDark)}
-                className={`w-full px-6 py-3 rounded-xl transition-colors flex items-center justify-center gap-2 ${
+                className={`w-full px-6 py-4 rounded-xl transition-colors flex items-center justify-center gap-2 text-lg font-medium ${
                   isDark 
                     ? 'text-gray-300 hover:text-white hover:bg-white/5' 
                     : 'text-gray-700 hover:text-[#0A0A0A] hover:bg-gray-100'
@@ -225,7 +225,7 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
               </button>
               <Link 
                 href="/login"
-                className={`block text-center w-full px-6 py-3 transition-colors rounded-xl ${
+                className={`block text-center w-full px-6 py-4 text-lg font-medium transition-colors rounded-xl ${
                   isDark 
                     ? 'text-gray-300 hover:text-white hover:bg-white/5' 
                     : 'text-gray-700 hover:text-[#0A0A0A] hover:bg-gray-100'
@@ -235,7 +235,7 @@ export function Header({ activeSection, setActiveSection, isDark, setIsDark, scr
               </Link>
               <Link 
                 href="/register"
-                className={`block text-center w-full px-6 py-3 rounded-xl transition-all ${
+                className={`block text-center w-full px-6 py-4 text-lg font-medium rounded-xl transition-all ${
                   isDark 
                     ? 'bg-white text-[#0A0A0A] hover:bg-gray-100' 
                     : 'bg-[#0A0A0A] text-white hover:bg-gray-900'

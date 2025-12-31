@@ -59,7 +59,7 @@ export function JobCard({ job, userType, isDark, onEdit, onToggleStatus }: JobCa
       <div className="flex flex-col lg:flex-row gap-6">
         
         {/* --- LOGO O ICONO --- */}
-        <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 shadow-lg shadow-purple-500/20">
+        <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shrink-0 shadow-lg shadow-purple-500/20">
           {userType === "student" ? (
              // Lógica de Estudiante: Intenta mostrar logo, si no, iniciales de la empresa
              job.company_profiles?.logo_url ? (

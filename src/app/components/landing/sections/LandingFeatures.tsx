@@ -72,7 +72,7 @@ export function Features({ isDark }: FeaturesProps) {
           
           </div>
           
-          <h2 className="text-5xl mb-6">
+          <h2 className="text-4xl md:text-5xl mb-6">
             <span className={isDark ? 'text-white' : 'text-[#0A0A0A]'}>
               Por qué elegir{' '}
             </span>
@@ -80,7 +80,7 @@ export function Features({ isDark }: FeaturesProps) {
               Unext
             </span>
           </h2>
-          <p className={`text-xl max-w-3xl mx-auto ${
+          <p className={`text-lg md:text-xl max-w-3xl mx-auto px-4 ${
             isDark ? 'text-gray-400' : 'text-gray-600'
           }`}>
             Una plataforma integral diseñada para revolucionar la conexión entre talento y oportunidades profesionales

@@ -10,8 +10,8 @@ export function Footer({ isDark }: FooterProps) {
       isDark ? 'border-t border-white/10' : 'border-t border-gray-200'
     }`}>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
-        <div className="grid md:grid-cols-5 gap-12 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 mb-12">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
               <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${

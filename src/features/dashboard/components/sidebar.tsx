@@ -11,6 +11,7 @@ import {
   User,
   Menu, // Importamos el icono de menú para abrir
   X,    // Importamos X para cerrar
+  ChevronLeft
 } from "lucide-react";
 
 interface SidebarProps {
@@ -39,57 +40,70 @@ export function Sidebar({
   onLogout,
 }: SidebarProps) {
   return (
-    <aside
-      className={`${
-        sidebarOpen ? "w-64" : "w-20"
-      } flex flex-col border-r transition-all duration-300 relative z-40 ${
-        isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
-      }`}
-    >
-      {/* Fondo decorativo */}
-      {!isDark && (
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-50/50 via-transparent to-purple-50/30 pointer-events-none" />
+    <>
+      {/* Overlay para móvil */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm"
+          onClick={() => setSidebarOpen(false)}
+        />
       )}
 
-      {/* --- HEADER DEL SIDEBAR (LOGO Y TOGGLE) --- */}
-      <div
-        className={`h-16 flex items-center justify-between px-4 border-b relative z-10 flex-shrink-0 ${
-          isDark ? "border-gray-800" : "border-gray-200"
+      {/* SIDEBAR MAIN CONTAINER */}
+      <aside
+        className={`fixed md:relative z-40 h-full flex flex-col border-r transition-all duration-300 ${
+          sidebarOpen ? "w-64 translate-x-0" : "w-64 -translate-x-full md:translate-x-0 md:w-20"
+        } ${
+          isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
         }`}
       >
-        {/* Lógica del Logo: Si está abierto muestra nombre completo, si no, solo la U */}
-        <div className={`flex items-center ${!sidebarOpen && "justify-center w-full"}`}>
-           {sidebarOpen ? (
-             <h1 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-               U<span className="text-purple-500">next</span>
-             </h1>
-           ) : (
-             <span className="text-2xl font-bold text-purple-500">U</span>
-           )}
-        </div>
+        {/* Fondo decorativo */}
+        {!isDark && (
+          <div className="absolute inset-0 bg-linear-to-b from-purple-50/50 via-transparent to-purple-50/30 pointer-events-none" />
+        )}
 
-        {/* Botón para Cerrar (Solo visible si está abierto) */}
+        {/* --- HEADER DEL SIDEBAR (LOGO Y TOGGLE) --- */}
+        <div
+          className={`h-16 flex items-center justify-between px-4 border-b relative z-10 shrink-0 ${
+            isDark ? "border-gray-800" : "border-gray-200"
+          }`}
+        >
+          {/* Lógica del Logo: Si está abierto muestra nombre completo, si no, solo la U (en desktop) */}
+          <div className={`flex items-center ${!sidebarOpen && "md:justify-center w-full"}`}>
+             {(sidebarOpen || (typeof window !== 'undefined' && window.innerWidth < 768)) ? (
+               <h1 className={`text-xl font-bold flex items-center gap-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+                 <span className="bg-purple-600 text-white w-8 h-8 rounded-lg flex items-center justify-center">U</span>
+                 <span className={`${!sidebarOpen && "hidden"}`}>next</span>
+               </h1>
+             ) : (
+               <span className="text-2xl font-bold text-purple-500">U</span>
+             )}
+          </div>
+
+      {/* Botón de Cerrar (X) - Solo visible si la barra está abierta */}
         {sidebarOpen && (
-           <button 
-             onClick={() => setSidebarOpen(false)}
-             className={`p-1 rounded-lg transition-colors ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"}`}
-           >
-             <X className="w-5 h-5" />
-           </button>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className={`p-1 rounded-lg transition-colors ${
+              isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"
+            }`}
+          >
+            <X className="w-5 h-5" />
+          </button>
         )}
       </div>
 
-      {/* Botón para ABRIR (Solo visible si está cerrado y se coloca al inicio del nav) */}
-      {!sidebarOpen && (
-        <div className="w-full flex justify-center py-4">
-            <button 
-              onClick={() => setSidebarOpen(true)}
-              className={`p-2 rounded-xl transition-colors ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"}`}
-            >
-               <Menu className="w-6 h-6" />
-            </button>
-        </div>
-      )}
+        {/* Botón para ABRIR (Solo visible si está cerrado en desktop) */}
+        {!sidebarOpen && (
+          <div className="hidden md:flex w-full justify-center py-4">
+              <button 
+                onClick={() => setSidebarOpen(true)}
+                className={`p-2 rounded-xl transition-colors ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"}`}
+              >
+                 <Menu className="w-6 h-6" />
+              </button>
+          </div>
+        )}
 
       {/* --- NAVEGACIÓN --- */}
       {/* Usamos overflow-x-hidden para que el texto no "baile" al cerrar */}
@@ -149,16 +163,16 @@ export function Sidebar({
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
             className={`w-full flex items-center ${
-              sidebarOpen ? "gap-3 px-2" : "justify-center"
+              sidebarOpen ? "gap-3 px-2" : "justify-center md:justify-center"
             } py-2 rounded-xl transition-all duration-200 ${
               isDark ? "hover:bg-gray-800" : "hover:bg-gray-100"
             }`}
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0 font-bold shadow-md">
+            <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white shrink-0 font-bold shadow-md">
               {userName.substring(0, 2).toUpperCase()}
             </div>
             
-            {sidebarOpen && (
+            {(sidebarOpen) && (
               <>
                 <div className="flex-1 text-left overflow-hidden">
                   <p className={`truncate text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
@@ -205,7 +219,8 @@ export function Sidebar({
           )}
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 
@@ -225,7 +240,7 @@ function SidebarItem({ icon: Icon, label, isActive, onClick, isOpen, isDark, has
               : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
           }`}
         >
-          <Icon className={`w-5 h-5 flex-shrink-0 ${!isActive && "group-hover:scale-110 transition-transform"}`} />
+          <Icon className={`w-5 h-5 shrink-0 ${!isActive && "group-hover:scale-110 transition-transform"}`} />
           
           {isOpen && (
              <span className="truncate font-medium text-sm animate-in fade-in duration-200">

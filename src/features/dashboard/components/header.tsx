@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 interface HeaderProps {
-  sidebarOpen: boolean;
+  sidebarOpen?: boolean;
   setSidebarOpen: (open: boolean) => void;
   isDark: boolean;
   setIsDark: (dark: boolean) => void;
@@ -54,12 +54,20 @@ export function Header({
 
   return (
     <header
-      className={`h-16 border-b flex items-center justify-between px-4 md:px-8 flex-shrink-0 ${
+      className={`h-16 border-b flex items-center justify-between px-4 md:px-8 shrink-0 ${
         isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
       }`}
     >
       <div className="flex items-center gap-4">
-        
+        {/* Toggle para móvil */}
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className={`md:hidden p-2 rounded-lg transition-colors ${
+            isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"
+          }`}
+        >
+          <Menu className="w-6 h-6" />
+        </button>
 
         {/* Título de la sección actual */}
         <div className="hidden md:block">
@@ -73,7 +81,7 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-2 md:gap-3">
-        {/* Buscador */}
+        {/* Buscador - Visible en MD+ */}
         <div className="relative hidden md:block">
           <Search
             className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${
@@ -90,6 +98,15 @@ export function Header({
             } focus:outline-none focus:ring-2 focus:ring-purple-500/20`}
           />
         </div>
+
+        {/* Botón de búsqueda móvil */}
+        <button
+          className={`md:hidden p-2 rounded-lg transition-colors ${
+            isDark ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-900"
+          }`}
+        >
+          <Search className="w-5 h-5" />
+        </button>
 
         {/* Toggle Dark Mode */}
         <button
@@ -144,7 +161,7 @@ export function Header({
                       } ${!notif.read ? (isDark ? "bg-gray-750" : "bg-purple-50/30") : ""}`}
                     >
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg flex-shrink-0 ${isDark ? "bg-purple-500/10" : "bg-purple-50"}`}>
+                        <div className={`p-2 rounded-lg shrink-0 ${isDark ? "bg-purple-500/10" : "bg-purple-50"}`}>
                           <Icon className="w-4 h-4 text-purple-500" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -156,7 +173,7 @@ export function Header({
                           </p>
                         </div>
                         {!notif.read && (
-                          <div className="w-2 h-2 bg-purple-500 rounded-full flex-shrink-0 mt-1"></div>
+                          <div className="w-2 h-2 bg-purple-500 rounded-full shrink-0 mt-1"></div>
                         )}
                       </div>
                     </div>

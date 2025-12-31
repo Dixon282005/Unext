@@ -76,7 +76,7 @@ export function TrustedBy({ isDark }: TrustedByProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Título mejorado */}
         <div className="text-center mb-16">
-          <h2 className={`text-4xl md:text-5xl mb-4 transition-colors duration-500 ${
+          <h2 className={`text-3xl md:text-5xl mb-4 transition-colors duration-500 ${
             isDark ? 'text-white' : 'text-[#0A0A0A]'
           }`}>
             Confían en{' '}
@@ -106,7 +106,7 @@ export function TrustedBy({ isDark }: TrustedByProps) {
               {doubledUniversities.map((uni, index) => (
                 <div
                   key={index}
-                  className={`flex-shrink-0 transition-all duration-300 hover:scale-110 cursor-pointer group ${
+                  className={`shrink-0 transition-all duration-300 hover:scale-110 cursor-pointer group ${
                     isDark 
                       ? 'hover:brightness-125' 
                       : 'hover:shadow-2xl'
@@ -122,14 +122,14 @@ export function TrustedBy({ isDark }: TrustedByProps) {
                     {/* Efecto de brillo en hover */}
                     <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
                       isDark 
-                        ? 'bg-gradient-to-br from-purple-500/10 to-transparent' 
-                        : 'bg-gradient-to-br from-purple-100/50 to-transparent'
+                        ? 'bg-linear-to-br from-purple-500/10 to-transparent' 
+                        : 'bg-linear-to-br from-purple-100/50 to-transparent'
                     }`}></div>
                     
                     {/* Contenido */}
                     <div className="relative flex flex-col items-center text-center gap-4">
                       {/* Logo con gradiente de fondo */}
-                      <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl transition-transform duration-300 group-hover:scale-110 bg-gradient-to-br ${uni.color}`}>
+                      <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-4xl transition-transform duration-300 group-hover:scale-110 bg-linear-to-br ${uni.color}`}>
                         <span className="drop-shadow-lg">{uni.logo}</span>
                       </div>
                       
@@ -160,13 +160,13 @@ export function TrustedBy({ isDark }: TrustedByProps) {
           {/* Gradientes de fade mejorados */}
           <div className={`absolute left-0 top-0 bottom-0 w-40 pointer-events-none z-10 ${
             isDark 
-              ? 'bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/80 to-transparent' 
-              : 'bg-gradient-to-r from-white via-white/80 to-transparent'
+              ? 'bg-linear-to-r from-[#0A0A0A] via-[#0A0A0A]/80 to-transparent' 
+              : 'bg-linear-to-r from-white via-white/80 to-transparent'
           }`}></div>
           <div className={`absolute right-0 top-0 bottom-0 w-40 pointer-events-none z-10 ${
             isDark 
-              ? 'bg-gradient-to-l from-[#0A0A0A] via-[#0A0A0A]/80 to-transparent' 
-              : 'bg-gradient-to-l from-white via-white/80 to-transparent'
+              ? 'bg-linear-to-l from-[#0A0A0A] via-[#0A0A0A]/80 to-transparent' 
+              : 'bg-linear-to-l from-white via-white/80 to-transparent'
           }`}></div>
         </div>
 

@@ -71,7 +71,7 @@ export function Hero({ setActiveSection, isDark }: HeroProps) {
           </div>
           
           {/* Main Title */}
-          <h1 className={`text-6xl md:text-8xl mb-8 transition-all duration-700 ${
+          <h1 className={`text-5xl sm:text-6xl md:text-8xl mb-6 md:mb-8 transition-all duration-700 ${
             isDark ? 'text-white' : 'text-[#0A0A0A]'
           }`}>
             El futuro del
@@ -87,7 +87,7 @@ export function Hero({ setActiveSection, isDark }: HeroProps) {
           </h1>
           
           {/* Description */}
-          <p className={`text-xl md:text-2xl mb-12 leading-relaxed max-w-3xl mx-auto transition-all duration-700 ${
+          <p className={`text-lg sm:text-xl md:text-2xl mb-8 md:mb-12 leading-relaxed max-w-3xl mx-auto px-4 transition-all duration-700 ${
             isDark ? 'text-gray-400' : 'text-gray-600'
           }`}>
             Unext revoluciona la forma en que estudiantes, egresados y empresas se conectan. 
@@ -104,14 +104,14 @@ export function Hero({ setActiveSection, isDark }: HeroProps) {
               {/* Efecto de fondo morado animado */}
               <div className={`absolute inset-0 ${
                 isDark 
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-500' 
-                  : 'bg-gradient-to-r from-purple-600 to-purple-500'
+                  ? 'bg-linear-to-r from-purple-600 to-purple-500' 
+                  : 'bg-linear-to-r from-purple-600 to-purple-500'
               }`}></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-purple-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
               {/* Efecto de brillo */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent transform -skew-x-12 animate-shine"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent transform -skew-x-12 animate-shine"></div>
               </div>
               
               <span className="relative flex items-center justify-center gap-2 text-white">
@@ -132,8 +132,8 @@ export function Hero({ setActiveSection, isDark }: HeroProps) {
               {/* Efecto de fondo sutil en hover */}
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
                 isDark 
-                  ? 'bg-gradient-to-r from-purple-500/10 to-violet-500/10' 
-                  : 'bg-gradient-to-r from-purple-50 to-violet-50'
+                  ? 'bg-linear-to-r from-purple-500/10 to-violet-500/10' 
+                  : 'bg-linear-to-r from-purple-50 to-violet-50'
               }`}></div>
               
               <span className={`relative flex items-center justify-center gap-2 ${

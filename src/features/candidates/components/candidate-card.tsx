@@ -41,13 +41,13 @@ export function CandidateCard({ candidate, isDark, onClick }: CandidateCardProps
       }`}
     >
       {/* Barra superior decorativa */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+      <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-purple-500 to-pink-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
       
       <div className="p-4 md:p-6">
         {/* Header: Avatar y Nombre */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
+            <div className="w-12 h-12 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-md">
               {candidate.avatar_url ? (
                 <img src={candidate.avatar_url} alt={candidate.full_name} className="w-full h-full rounded-full object-cover" />
               ) : (

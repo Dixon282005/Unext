@@ -38,7 +38,7 @@ export function PlatformPreview({ isDark }: PlatformPreviewProps) {
             </span>
           </div>
           
-          <h2 className={`text-4xl md:text-5xl mb-4 ${
+          <h2 className={`text-3xl md:text-5xl mb-4 ${
             isDark ? 'text-white' : 'text-[#0A0A0A]'
           }`}>
             Conecta con tu{' '}
@@ -72,8 +72,8 @@ export function PlatformPreview({ isDark }: PlatformPreviewProps) {
             {/* Overlay con gradiente sutil */}
             <div className={`absolute inset-0 pointer-events-none ${
               isDark 
-                ? 'bg-gradient-to-t from-[#0A0A0A]/20 to-transparent' 
-                : 'bg-gradient-to-t from-white/10 to-transparent'
+                ? 'bg-linear-to-t from-[#0A0A0A]/20 to-transparent' 
+                : 'bg-linear-to-t from-white/10 to-transparent'
             }`}></div>
           </div>
 

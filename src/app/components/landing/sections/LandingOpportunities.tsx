@@ -96,34 +96,36 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
 
   const filteredOpportunities = opportunities.filter(opp => {
     const matchesSearch = opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         opp.company.toLowerCase().includes(searchTerm.toLowerCase());
+                          opp.company.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === 'all' || opp.type === selectedType;
     const matchesLocation = selectedLocation === 'all' || opp.location.includes(selectedLocation);
     return matchesSearch && matchesType && matchesLocation;
   });
 
   return (
-    <section className="pt-32 pb-20 min-h-screen">
+    <section className="pt-24 pb-20 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 opacity-0 animate-[fadeIn_0.8s_ease-in-out_forwards]">
-          <h1 className={`text-5xl mb-4 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
+        
+        {/* Header Section */}
+        <div className="mb-10 opacity-0 animate-[fadeIn_0.8s_ease-in-out_forwards]">
+          <h1 className={`text-3xl md:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
             Descubre tu próxima{' '}
             <span className={isDark ? 'text-purple-500' : 'text-purple-600'}>
               oportunidad
             </span>
           </h1>
-          <p className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <p className={`text-lg md:text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
             {filteredOpportunities.length} oportunidades disponibles para ti
           </p>
         </div>
         
-        {/* Search and Filters */}
-        <div className={`backdrop-blur-xl p-6 rounded-3xl mb-8 transition-all duration-500 opacity-0 animate-[fadeIn_0.8s_ease-in-out_0.2s_forwards] ${
+        {/* Search and Filters - Responsive Grid */}
+        <div className={`backdrop-blur-xl p-4 md:p-6 rounded-3xl mb-8 transition-all duration-500 opacity-0 animate-[fadeIn_0.8s_ease-in-out_0.2s_forwards] ${
           isDark 
             ? 'bg-white/5 border border-white/10' 
             : 'bg-white border border-gray-200 shadow-lg'
         }`}>
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="md:col-span-2 relative">
               <Search className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
                 isDark ? 'text-gray-400' : 'text-gray-500'
@@ -133,7 +135,7 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
                 placeholder="Buscar por puesto o empresa..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={`w-full pl-12 pr-4 py-3 rounded-2xl transition-all ${
+                className={`w-full pl-12 pr-4 py-3 rounded-2xl transition-all outline-none ${
                   isDark 
                     ? 'bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-white/30 focus:bg-white/10' 
                     : 'bg-gray-50 border border-gray-200 text-black placeholder-gray-500 focus:border-gray-400 focus:bg-white'
@@ -144,7 +146,7 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className={`px-4 py-3 rounded-2xl transition-all ${
+              className={`px-4 py-3 rounded-2xl transition-all outline-none appearance-none ${
                 isDark 
                   ? 'bg-white/5 border border-white/10 text-white focus:border-white/30' 
                   : 'bg-gray-50 border border-gray-200 text-black focus:border-gray-400'
@@ -159,7 +161,7 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
             <select
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
-              className={`px-4 py-3 rounded-2xl transition-all ${
+              className={`px-4 py-3 rounded-2xl transition-all outline-none appearance-none ${
                 isDark 
                   ? 'bg-white/5 border border-white/10 text-white focus:border-white/30' 
                   : 'bg-gray-50 border border-gray-200 text-black focus:border-gray-400'
@@ -181,7 +183,7 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
           {filteredOpportunities.map((opportunity, index) => (
             <div 
               key={opportunity.id} 
-              className={`group relative backdrop-blur-xl rounded-3xl p-8 transition-all duration-500 hover:scale-[1.02] opacity-0 animate-[fadeIn_0.6s_ease-in-out_forwards] ${
+              className={`group relative backdrop-blur-xl rounded-3xl p-6 md:p-8 transition-all duration-500 hover:scale-[1.01] opacity-0 animate-[fadeIn_0.6s_ease-in-out_forwards] ${
                 isDark 
                   ? 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-purple-500/30' 
                   : 'bg-white border border-gray-200 hover:border-purple-600/30 hover:shadow-xl'
@@ -189,8 +191,8 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
               style={{ animationDelay: `${0.3 + index * 0.1}s` }}
             >
               {opportunity.featured && (
-                <div className="absolute top-6 right-6">
-                  <span className={`px-4 py-2 rounded-full shadow-lg ${
+                <div className="absolute top-4 right-4 md:top-6 md:right-6 z-10">
+                  <span className={`px-3 py-1 md:px-4 md:py-2 text-xs md:text-sm rounded-full shadow-lg font-medium ${
                     isDark 
                       ? 'bg-purple-600 text-white' 
                       : 'bg-purple-700 text-white'
@@ -200,70 +202,75 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
                 </div>
               )}
               
-              <div className="flex gap-6">
+              {/* Card Content Wrapper: Column on mobile, Row on Desktop */}
+              <div className="flex flex-col md:flex-row gap-6">
+                
+                {/* Logo Section */}
                 <div className="flex-shrink-0">
                   <ImageWithFallback
                     src={opportunity.logo}
                     alt={opportunity.company}
-                    className={`w-20 h-20 rounded-2xl object-cover transition-colors ${
+                    className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover transition-colors ${
                       isDark ? 'border border-white/20' : 'border border-gray-200'
                     }`}
                   />
                 </div>
                 
+                {/* Information Section */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-start mb-4">
+                  <div className="flex flex-col md:flex-row justify-between items-start mb-4 pr-0 md:pr-24">
                     <div>
-                      <h3 className={`text-2xl mb-2 ${
+                      <h3 className={`text-xl md:text-2xl font-bold mb-2 break-words ${
                         isDark ? 'text-white' : 'text-[#0A0A0A]'
                       }`}>
                         {opportunity.title}
                       </h3>
-                      <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                      <p className={`font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                         {opportunity.company}
                       </p>
                     </div>
                   </div>
                   
-                  <div className={`flex flex-wrap gap-4 mb-4 ${
+                  <div className={`flex flex-wrap gap-3 md:gap-4 mb-4 text-sm ${
                     isDark ? 'text-gray-400' : 'text-gray-600'
                   }`}>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
-                      <span>{opportunity.location}</span>
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{opportunity.location}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      <span>{opportunity.duration}</span>
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{opportunity.duration}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4" />
-                      <span>{opportunity.salary}</span>
+                    <div className="flex items-center gap-1.5">
+                      <DollarSign className="w-4 h-4 flex-shrink-0" />
+                      <span className="truncate">{opportunity.salary}</span>
                     </div>
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded-full ${
+                    <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       isDark 
                         ? 'bg-white text-[#0A0A0A]' 
                         : 'bg-[#0A0A0A] text-white'
                     }`}>
-                      <Briefcase className="w-4 h-4" />
+                      <Briefcase className="w-3 h-3" />
                       <span>{opportunity.type}</span>
                     </div>
                   </div>
                   
-                  <p className={`mb-6 leading-relaxed ${
+                  <p className={`mb-6 text-sm md:text-base leading-relaxed line-clamp-3 md:line-clamp-none ${
                     isDark ? 'text-gray-300' : 'text-gray-700'
                   }`}>
                     {opportunity.description}
                   </p>
                   
+                  {/* Skills */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {opportunity.skills.map((skill, index) => (
                       <span 
                         key={index} 
-                        className={`px-4 py-2 rounded-xl transition-colors ${
+                        className={`px-3 py-1.5 text-xs md:text-sm rounded-xl transition-colors ${
                           isDark 
-                            ? 'bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10' 
-                            : 'bg-gray-100 border border-gray-200 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-white/5 border border-white/10 text-gray-300' 
+                            : 'bg-gray-100 border border-gray-200 text-gray-700'
                         }`}
                       >
                         {skill}
@@ -271,21 +278,22 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
                     ))}
                   </div>
                   
-                  <div className="flex gap-3">
-                    <button className={`group/btn px-6 py-3 rounded-2xl flex items-center gap-2 transition-all duration-300 transform hover:scale-105 ${
+                  {/* Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button className={`group/btn w-full sm:w-auto px-6 py-3 rounded-2xl flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 ${
                       isDark 
                         ? 'bg-white text-[#0A0A0A] hover:bg-gray-100' 
                         : 'bg-[#0A0A0A] text-white hover:bg-gray-900'
                     }`}>
                       <span>Postularme ahora</span>
-                      <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
-                    <button className={`px-6 py-3 rounded-2xl transition-all flex items-center gap-2 ${
+                    <button className={`w-full sm:w-auto px-6 py-3 rounded-2xl transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 ${
                       isDark 
                         ? 'bg-white/5 border border-white/10 text-white hover:bg-white/10' 
                         : 'bg-gray-100 border border-gray-200 text-[#0A0A0A] hover:bg-gray-200'
                     }`}>
-                      <Bookmark className="w-5 h-5" />
+                      <Bookmark className="w-4 h-4" />
                       <span>Guardar</span>
                     </button>
                   </div>
@@ -295,14 +303,15 @@ export function Opportunities({ isDark }: OpportunitiesProps) {
           ))}
         </div>
         
+        {/* Empty State */}
         {filteredOpportunities.length === 0 && (
-          <div className="text-center py-20">
-            <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 opacity-50 ${
+          <div className="text-center py-20 animate-fadeIn">
+            <div className={`w-16 h-16 md:w-20 md:h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 opacity-50 ${
               isDark ? 'bg-white/10' : 'bg-gray-200'
             }`}>
-              <Briefcase className={`w-10 h-10 ${isDark ? 'text-white' : 'text-gray-700'}`} />
+              <Briefcase className={`w-8 h-8 md:w-10 md:h-10 ${isDark ? 'text-white' : 'text-gray-700'}`} />
             </div>
-            <h3 className={`text-2xl mb-2 ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
+            <h3 className={`text-xl md:text-2xl mb-2 font-semibold ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
               No se encontraron oportunidades
             </h3>
             <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>

@@ -73,7 +73,7 @@ export function MessagesView({ isDark }: MessagesViewProps) {
             >
               <div className="flex items-start gap-3">
                 <div className="relative">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm">
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-medium text-sm">
                     {chat.avatar}
                   </div>
                   {chat.online && (
@@ -133,7 +133,7 @@ export function MessagesView({ isDark }: MessagesViewProps) {
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-medium">
+                <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-medium">
                   {conversations[0].avatar}
                 </div>
                 <div>

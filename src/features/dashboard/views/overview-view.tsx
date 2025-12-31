@@ -220,7 +220,7 @@ export function OverviewView({ userType, isDark }: OverviewViewProps) {
             {recentJobs.map((job: any) => (
               <div key={job.id} className={`p-3 md:p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${isDark ? "bg-gray-800 border-gray-700 hover:border-purple-500/50" : "bg-gray-50 border-gray-200 hover:border-purple-500/50"}`}>
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white flex-shrink-0 text-sm md:text-base">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white shrink-0 text-sm md:text-base">
                     {userType === "student" 
                         ? (job.company_profiles?.logo_url ? <img src={job.company_profiles.logo_url} className="rounded-xl"/> : job.company_profiles?.company_name?.substring(0,2)) 
                         : job.title.substring(0, 2).toUpperCase()}
@@ -242,11 +242,11 @@ export function OverviewView({ userType, isDark }: OverviewViewProps) {
                     </div>
                   </div>
                   {userType === "student" ? (
-                    <div className={`px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm flex-shrink-0 ${isDark ? "bg-purple-500/10 text-purple-400" : "bg-purple-50 text-purple-600"}`}>
+                    <div className={`px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm shrink-0 ${isDark ? "bg-purple-500/10 text-purple-400" : "bg-purple-50 text-purple-600"}`}>
                       {job.match_percentage}%
                     </div>
                   ) : (
-                    <div className={`px-2 md:px-3 py-1 rounded-lg text-xs flex-shrink-0 ${getStatusColor(job.status)}`}>
+                    <div className={`px-2 md:px-3 py-1 rounded-lg text-xs shrink-0 ${getStatusColor(job.status)}`}>
                       {getStatusText(job.status)}
                     </div>
                   )}
@@ -266,7 +266,7 @@ export function OverviewView({ userType, isDark }: OverviewViewProps) {
               const Icon = activity.icon;
               return (
                 <div key={activity.id} className="flex items-start gap-3 md:gap-4">
-                  <div className={`p-2 rounded-lg flex-shrink-0 ${isDark ? "bg-purple-500/10" : "bg-purple-50"}`}>
+                  <div className={`p-2 rounded-lg shrink-0 ${isDark ? "bg-purple-500/10" : "bg-purple-50"}`}>
                     <Icon className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
                   </div>
                   <div className="flex-1 min-w-0">

@@ -24,7 +24,7 @@ export function SettingsView({ userType, userName, isDark }: SettingsViewProps) 
         
         {/* --- HEADER DEL PERFIL --- */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-purple-500/20">
+          <div className="w-20 h-20 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl font-bold shadow-xl shadow-purple-500/20">
             {userName.substring(0, 2).toUpperCase()}
           </div>
           <div>
