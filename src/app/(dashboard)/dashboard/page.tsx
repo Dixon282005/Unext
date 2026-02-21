@@ -238,8 +238,8 @@ export function Dashboard({ isDark: _initialDark, setIsDark: _setIsDark, onLogou
               </span>
             </button>
             <span className={`text-sm ${textFaint}`}>/</span>
-            <span className={`text-xs ${text}`}>
-              {userType === 'student' ? 'Juan Díaz' : 'Mi Empresa'}
+            <span className={`text-xs ${text} truncate max-w-[150px]`}>
+              {userType === 'student' ? (userName || 'Juan Díaz') : (userName || 'Mi Empresa')}
             </span>
           </div>
 
