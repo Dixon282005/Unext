@@ -1,7 +1,7 @@
 "use server"
 
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+// import { redirect } from 'next/navigation' // No usamos redirect para no romper el SPA flow
 import { revalidatePath } from 'next/cache'
 
 // =================================================================
@@ -13,7 +13,7 @@ export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
@@ -23,8 +23,16 @@ export async function loginAction(formData: FormData) {
     return { error: 'Credenciales inválidas. Verifica tu correo y contraseña.' }
   }
 
+  // Si estamos en un setup de páginas anidadas, revalidaríamos layout
   revalidatePath('/', 'layout')
-  redirect('/dashboard') 
+  
+  return { 
+    success: true, 
+    user: { 
+      email: data.user?.email || email,
+      name: data.user?.user_metadata?.full_name || 'Usuario'
+    } 
+  }
 }
 
 // =================================================================
@@ -34,18 +42,17 @@ export async function signupAction(formData: FormData) {
   const supabase = await createClient()
 
   // 1. Extraemos TODOS los datos
-  const firstName = formData.get('name') as string
-  const lastName = formData.get('lastname') as string
+  const name = formData.get('name') as string // Se usará como Full Name
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const confirmPassword = formData.get('confirmPassword') as string
   
   // Si no viene rol, asumimos 'user' por seguridad
-  const role = (formData.get('role') as string) || 'user' 
+  const role = (formData.get('role') as string) || 'student' 
 
   // 2. Validaciones Básicas (Campos vacíos)
-  if (!email || !password || !firstName || !lastName) {
-    return { error: 'Por favor completa todos los campos.' }
+  if (!email || !password || !name) {
+    return { error: 'Por favor completa todos los campos requeridos.' }
   }
 
   // 3. VALIDACIÓN DE CONTRASEÑA ROBUSTA 🔐
@@ -61,24 +68,29 @@ export async function signupAction(formData: FormData) {
   }
 
   // C) Caracteres especiales (Regex)
-  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+  const specialCharRegex = /[!@#$%^&*(),.?":{}|<>_]/;
   if (!specialCharRegex.test(password)) {
     return { error: 'La contraseña debe incluir al menos un carácter especial (ej: @, #, !).' }
   }
 
-  // 4. Creamos el nombre completo
-  const fullName = `${firstName} ${lastName}`.trim()
+  // D) Al menos un número y una letra mayúscula
+  if (!/[A-Z]/.test(password)) {
+    return { error: 'La contraseña debe incluir al menos una letra mayúscula.' }
+  }
+  if (!/[0-9]/.test(password)) {
+    return { error: 'La contraseña debe incluir al menos un número.' }
+  }
 
-  // 5. Creamos el usuario en Supabase
-  const { error } = await supabase.auth.signUp({
+  // 4. Creamos el usuario en Supabase
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      // Pasamos el rol en la metadata para que el Trigger de SQL lo capture
       data: {
-        full_name: fullName, 
+        full_name: name, 
         role: role, 
       },
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
     },
   })
 
@@ -87,8 +99,7 @@ export async function signupAction(formData: FormData) {
     return { error: error.message }
   }
 
-  // Éxito
-  redirect('/login') 
+  return { success: true, user: { email, name } }
 }
 
 // =================================================================
@@ -98,5 +109,5 @@ export async function logoutAction() {
   const supabase = await createClient()
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')
-  redirect('/login') 
+  return { success: true }
 }

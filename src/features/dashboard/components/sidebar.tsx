@@ -111,6 +111,14 @@ export function Sidebar({
         
         <SidebarItem 
            icon={LayoutDashboard} 
+           label="Feed" 
+           isActive={activeTab === "feed"} 
+           onClick={() => setActiveTab("feed")}
+           isOpen={sidebarOpen} isDark={isDark} 
+        />
+
+        <SidebarItem 
+           icon={LayoutDashboard} 
            label="Vista General" 
            isActive={activeTab === "overview"} 
            onClick={() => setActiveTab("overview")}

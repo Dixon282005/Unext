@@ -1,122 +1,111 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Navbar } from './components/landing/Navbar';
+import { Hero } from './components/landing/Hero';
+import { TrustedBy } from './components/landing/TrustedBy';
+import { Features } from './components/landing/Features';
+import { Oportunidades } from './components/landing/Oportunidades';
+import { Talento } from './components/landing/Talento';
+import { PlatformPreview } from './components/landing/PlatformPreview';
+import { HowItWorks } from './components/landing/HowItWorks';
+import { Testimonials } from './components/landing/Testimonials';
+import { FAQ } from './components/landing/FAQ';
+import { CTA } from './components/landing/CTA';
+import { Footer } from './components/landing/Footer';
+import { ParallaxOrbs } from './components/landing/ParallaxOrbs';
+import { Login } from './(auth)/login/page';
+import { Register } from './(auth)/register/page';
+import { Dashboard } from './(dashboard)/dashboard/page';
 
-import { Header } from './components/landing/layout/LandingHeader';
-import { Hero } from './components/landing/sections/LandingHero';
-import { Features } from './components/landing/sections/LandingFeatures';
-import { TrustedBy } from './components/landing/sections/LandingTrustedBy';
-import { HowItWorks } from './components/landing/sections/LandingHowItWorks';
-import { FAQ } from './components/landing/sections/LandingFAQ';
-import { Testimonials } from './components/landing/sections/LandingTestimonials';
-import { Opportunities } from './components/landing/sections/LandingOpportunities';
-import { Candidates } from './components/landing/sections/LandingCandidates';
-import { Footer } from './components/landing/layout/LandingFooter';
-import { PlatformPreview } from './components/landing/sections/LandingPreview';
-
-import { motion, AnimatePresence } from 'framer-motion';
+type Page = 'landing' | 'login' | 'register' | 'dashboard';
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState<'home' | 'opportunities' | 'candidates'>('home');
-  const [isDark, setIsDark] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
+  const [currentPage, setCurrentPage] = useState<Page>('landing');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userType, setUserType] = useState<'student' | 'company'>('student');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Scroll suave hacia arriba cuando cambia la sección
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [activeSection]);
-
-  // Variantes de animación para las secciones
-  const sectionVariants = {
-    initial: { 
-      opacity: 0,
-      x: 100
-    },
-    animate: { 
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1] as const
-      }
-    },
-    exit: { 
-      opacity: 0,
-      x: -100,
-      transition: {
-        duration: 0.4,
-        ease: [0.25, 0.1, 0.25, 1] as const
-      }
-    }
+  const handleLogin = (data: { name: string, email: string }) => {
+    setUserName(data.name);
+    setUserEmail(data.email);
+    setIsAuthenticated(true);
+    setCurrentPage('dashboard');
   };
 
-  return (
-    <div className={`min-h-screen transition-colors duration-500 ${
-      isDark 
-        ? 'bg-[#0A0A0A]' 
-        : 'bg-white'
-    }`}>
-      <Header 
-        activeSection={activeSection} 
-        setActiveSection={setActiveSection}
-        isDark={isDark}
-        setIsDark={setIsDark}
-        scrollY={scrollY}
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentPage('landing');
+  };
+
+  // Auth pages (always dark)
+  if (currentPage === 'login') {
+    return (
+      <Login
+        isDark={true}
+        onLogin={handleLogin}
+        onNavigateToRegister={() => setCurrentPage('register')}
+        onNavigateToHome={() => setCurrentPage('landing')}
       />
-      
-      <AnimatePresence>
-        {activeSection === 'home' && (
-          <motion.div
-            key="home"
-            variants={sectionVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Hero setActiveSection={setActiveSection} isDark={isDark} />
-            <PlatformPreview isDark={isDark} />
-            <TrustedBy isDark={isDark} />
-            <Features isDark={isDark} />
-            <HowItWorks isDark={isDark} />
-            <FAQ isDark={isDark} />
-            <Testimonials isDark={isDark} />
-          </motion.div>
-        )}
-        
-        {activeSection === 'opportunities' && (
-          <motion.div
-            key="opportunities"
-            variants={sectionVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Opportunities isDark={isDark} />
-          </motion.div>
-        )}
-        {activeSection === 'candidates' && (
-          <motion.div
-            key="candidates"
-            variants={sectionVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Candidates isDark={isDark} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      <Footer isDark={isDark} />
+    );
+  }
+
+  if (currentPage === 'register') {
+    return (
+      <Register
+        isDark={true}
+        onRegister={(data) => {
+          setUserType(data.type);
+          setUserName(data.name);
+          setUserEmail(data.email);
+          setIsAuthenticated(true);
+          setCurrentPage('dashboard');
+        }}
+        onNavigateToLogin={() => setCurrentPage('login')}
+        onNavigateToHome={() => setCurrentPage('landing')}
+      />
+    );
+  }
+
+  if (currentPage === 'dashboard' && isAuthenticated) {
+    return (
+      <Dashboard
+        isDark={true}
+        setIsDark={() => {}}
+        onLogout={handleLogout}
+        userType={userType}
+        userName={userName}
+        userEmail={userEmail}
+      />
+    );
+  }
+
+  // Landing Page — nuevo diseño scroll-based
+  return (
+    <div className="min-h-screen bg-[#080808] relative overflow-x-hidden">
+      {/* Global ambient orbs */}
+      <ParallaxOrbs />
+
+      <Navbar
+        onNavigateToLogin={() => setCurrentPage('login')}
+        onNavigateToRegister={() => setCurrentPage('register')}
+      />
+
+      <main>
+        <Hero onNavigateToRegister={() => setCurrentPage('register')} />
+        <TrustedBy />
+        <Features />
+        <Oportunidades />
+        <Talento />
+        <PlatformPreview />
+        <HowItWorks />
+        <Testimonials />
+        <FAQ />
+        <CTA onNavigateToRegister={() => setCurrentPage('register')} />
+      </main>
+
+      <Footer />
     </div>
   );
 }

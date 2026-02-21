@@ -44,6 +44,7 @@ export function Header({
   const getTabTitle = () => {
     switch(activeTab) {
       case "overview": return "Vista General";
+      case "feed": return "Inicio";
       case "jobs": return userType === "student" ? "Oportunidades" : "Mis Vacantes";
       case "candidates": return "Candidatos";
       case "messages": return "Mensajes";
