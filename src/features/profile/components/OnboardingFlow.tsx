@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowLeft, Upload, Link as LinkIcon, Check, Building, User, GraduationCap, X } from 'lucide-react';
 import PhoneInput, { getCountryCallingCode } from 'react-phone-number-input';
@@ -79,7 +79,7 @@ const commonSkills = [
 export function OnboardingFlow({ onComplete, userName, userType = 'student' }: OnboardingProps) {
   // Ajuste: si es company el profileType ya viene predefinido, y nos saltamos el inicio de Estudiante.
   const [currentStep, setCurrentStep] = useState(userType === 'company' ? 2 : 1);
-  const totalSteps = 6;
+  const totalSteps = 7;
 
   const [formData, setFormData] = useState<OnboardingData>({
     profileType: userType === 'company' ? 'company' : null,
@@ -101,6 +101,9 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
 
   const [skillInput, setSkillInput] = useState('');
   const [isDragging, setIsDragging] = useState(false);
+  const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', '']);
+  const otpRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
+  const otpInput = otpDigits.join('');
 
   // Selector dinámico demográfico
   const availableStates = useMemo(() => {
@@ -166,9 +169,21 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
 
   // === VALIDATIONS ===
   const isStep1Valid = !!formData.profileType;
-  const isStep2Valid = formData.country && formData.address1.length > 3 && formData.phone && formData.phone.length > 6;
-  const isStep3Valid = formData.profession.trim().length > 0 && formData.skills.length > 0;
-  const isStep4Valid = !!formData.platformGoal;
+  const isStep2Valid = Boolean(
+    formData.country &&
+    (availableStates.length === 0 || formData.state) &&
+    (availableCities.length === 0 || formData.city) &&
+    formData.address1 && formData.address1.trim().length >= 3 &&
+    formData.phone && formData.phone.length > 7
+  );
+  const isStep3Valid = otpInput === '123456';
+  const isStep4Valid = formData.profession.trim().length > 0 && formData.skills.length > 0;
+  const isStep5Valid = !!formData.platformGoal;
+  const isStep6Valid = Boolean(
+    formData.educationLevel &&
+    formData.institution.trim().length >= 2 &&
+    formData.yearsOfExperience
+  );
 
   const variants = {
     enter: (direction: number) => ({ x: direction > 0 ? 50 : -50, opacity: 0 }),
@@ -376,7 +391,18 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                         countryCallingCodeEditable={false}
                         country={formData.country as any}
                         value={formData.phone}
-                        onChange={(value) => updateData({ phone: value || '' })}
+                        onChange={(value) => {
+                          if (formData.country) {
+                            const expectedPrefix = '+' + getCountryCallingCode(formData.country as any);
+                            // Impedir la eliminación del prefijo por el usuario
+                            if (!value || !value.startsWith(expectedPrefix)) {
+                              const rawDigits = value ? value.replace(/^\+\d{1,3}/, '') : '';
+                              updateData({ phone: expectedPrefix + rawDigits });
+                              return;
+                            }
+                          }
+                          updateData({ phone: value || '' });
+                        }}
                         placeholder={formData.country ? "Número de contacto" : "Seleccione su país primero"}
                         disabled={!formData.country}
                       />
@@ -388,8 +414,63 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
               </motion.div>
             )}
 
-            {/* ====== STEP 3: ESPECIALIDAD (Antes 2) ====== */}
+            {/* ====== STEP 3: OTP Verificación ====== */}
             {currentStep === 3 && (
+              <motion.div
+                key="step3" custom={1} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}
+                className="space-y-8"
+              >
+                <div className="text-center space-y-2">
+                  <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Verificación Telefónica</h1>
+                  <p className="text-gray-400">Hemos enviado un código SMS al número {formData.phone || 'indicado'}.</p>
+                  <p className="text-sm text-purple-400/80">(Simulación: digite 123456)</p>
+                </div>
+
+                <div className="flex flex-col items-center justify-center space-y-8 pt-6 pb-4">
+                  <label className="text-xs text-gray-500 uppercase tracking-wider font-medium text-center block">Código de 6 dígitos</label>
+                  <div className="flex gap-3 justify-center">
+                    {otpDigits.map((digit, i) => (
+                      <input
+                        key={i}
+                        ref={otpRefs[i]}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, '');
+                          const newDigits = [...otpDigits];
+                          newDigits[i] = val.slice(-1);
+                          setOtpDigits(newDigits);
+                          if (val && i < 5) otpRefs[i + 1].current?.focus();
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Backspace' && !otpDigits[i] && i > 0) {
+                            otpRefs[i - 1].current?.focus();
+                          }
+                        }}
+                        onFocus={(e) => e.target.select()}
+                        className={`w-12 h-14 text-center text-2xl font-bold font-mono rounded-xl border transition-all outline-none ${
+                          digit
+                            ? 'bg-purple-500/15 border-purple-500 text-white'
+                            : 'bg-white/5 border-white/15 text-white focus:border-purple-500'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <div className="h-5 text-center">
+                    {otpInput.length === 6 && otpInput !== '123456' && (
+                      <p className="text-red-400 text-sm">Código incorrecto. Vuelva a intentarlo.</p>
+                    )}
+                  </div>
+                </div>
+
+                <PrimaryButton disabled={!isStep3Valid} onClick={nextStep} text="Verificar y Continuar" />
+              </motion.div>
+            )}
+
+            {/* ====== STEP 4: ESPECIALIDAD (Antes 3) ====== */}
+            {currentStep === 4 && (
               <motion.div
                 key="step3" custom={1} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}
                 className="space-y-8"
@@ -491,12 +572,12 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                   </div>
                 </div>
 
-                <PrimaryButton disabled={!isStep3Valid} onClick={nextStep} text="Continuar a Objetivos" />
+                <PrimaryButton disabled={!isStep4Valid} onClick={nextStep} text="Continuar a Objetivos" />
               </motion.div>
             )}
 
-            {/* ====== STEP 4: OBJETIVOS EN PLATAFORMA (Antes 3) ====== */}
-            {currentStep === 4 && (
+            {/* ====== STEP 5: OBJETIVOS EN PLATAFORMA (Antes 4) ====== */}
+            {currentStep === 5 && (
               <motion.div
                 key="step4" custom={1} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}
                 className="space-y-8"
@@ -528,12 +609,12 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                   })}
                 </div>
 
-                <PrimaryButton disabled={!isStep4Valid} onClick={nextStep} text="Continuar" />
+                <PrimaryButton disabled={!isStep5Valid} onClick={nextStep} text="Continuar" />
               </motion.div>
             )}
 
-            {/* ====== STEP 5: HISTORIAL (Antes 4) ====== */}
-            {currentStep === 5 && (
+            {/* ====== STEP 6: HISTORIAL (Antes 5) ====== */}
+            {currentStep === 6 && (
               <motion.div
                 key="step5" custom={1} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}
                 className="space-y-8"
@@ -619,16 +700,13 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                 </div>
 
                 <div className="flex flex-col gap-3 pt-2">
-                  <PrimaryButton disabled={false} onClick={nextStep} text="Guardar Información" />
-                  <button onClick={nextStep} className="text-sm text-gray-500 hover:text-white transition-colors py-2">
-                    Omitir este paso
-                  </button>
+                  <PrimaryButton disabled={!isStep6Valid} onClick={nextStep} text="Guardar Información" />
                 </div>
               </motion.div>
             )}
 
-            {/* ====== STEP 6: DOCUMENTO (Antes 5) ====== */}
-            {currentStep === 6 && (
+            {/* ====== STEP 7: DOCUMENTO (Antes 6) ====== */}
+            {currentStep === 7 && (
               <motion.div
                 key="step6" custom={1} variants={variants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.3 }}
                 className="space-y-8"
