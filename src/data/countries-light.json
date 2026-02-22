@@ -1,0 +1,112 @@
+[
+  {
+    "isoCode": "VE",
+    "name": "Venezuela",
+    "states": [
+      { "name": "Distrito Capital", "cities": ["Caracas"] },
+      { "name": "Amazonas", "cities": ["Puerto Ayacucho", "San Fernando de Atabapo", "Maroa", "San Carlos de Río Negro", "San Juan de Manapiare", "La Esmeralda"] },
+      { "name": "Anzoátegui", "cities": ["Barcelona", "Puerto La Cruz", "El Tigre", "Anaco", "Cantaura", "Lechería", "Guanta", "San José de Guanipa", "Píritu", "Puerto Píritu"] },
+      { "name": "Apure", "cities": ["San Fernando de Apure", "Guasdualito", "Achaguas", "Elorza", "San Juan de Payara", "Elorza", "Bruzual"] },
+      { "name": "Aragua", "cities": ["Maracay", "Turmero", "La Victoria", "Cagua", "Palo Negro", "El Limón", "San Mateo", "Villa de Cura", "Santa Cruz", "Colonia Tovar"] },
+      { "name": "Barinas", "cities": ["Barinas", "Socopó", "Barinitas", "Sabaneta", "Ciudad Bolivia", "Santa Bárbara", "Barrancas", "Obispos"] },
+      { "name": "Bolívar", "cities": ["Ciudad Guayana", "Puerto Ordaz", "San Félix", "Ciudad Bolívar", "Upata", "Caicara del Orinoco", "Tumeremo", "Guasipati", "El Callao", "Santa Elena de Uairén"] },
+      { "name": "Carabobo", "cities": ["Valencia", "Puerto Cabello", "Guacara", "Mariara", "San Joaquín", "San Diego", "Los Guayos", "Morón", "Bejuma", "Montalbán", "Miranda", "Tocuyito"] },
+      { "name": "Cojedes", "cities": ["San Carlos", "Tinaco", "Tinaquillo", "El Pao", "El Baúl", "Macapo"] },
+      { "name": "Delta Amacuro", "cities": ["Tucupita", "Pedernales", "Curiapo", "Sierra Imataca"] },
+      { "name": "Falcón", "cities": ["Coro", "Punto Fijo", "Dabajuro", "Churuguara", "Tucacas", "Chichiriviche", "Pueblo Nuevo", "Santa Ana", "Mirimire"] },
+      { "name": "Guárico", "cities": ["San Juan de los Morros", "Valle de la Pascua", "Calabozo", "Zaraza", "Altagracia de Orituco", "Tucupido", "El Sombrero", "Camaguán", "Ortiz"] },
+      { "name": "Lara", "cities": ["Barquisimeto", "Cabudare", "Carora", "El Tocuyo", "Quíbor", "Duaca", "Siquisique", "Sanare", "Sarare"] },
+      { "name": "Mérida", "cities": ["Mérida", "El Vigía", "Ejido", "Tovar", "Lagunillas", "Nueva Bolivia", "Mucuchíes", "Santa Cruz de Mora", "Arapuey", "Timotes"] },
+      { "name": "Miranda", "cities": ["Los Teques", "Petare", "Baruta", "Chacao", "El Hatillo", "Guarenas", "Guatire", "Charallave", "Cúa", "Ocumare del Tuy", "Santa Teresa del Tuy", "San Antonio de los Altos", "Caucagua", "Higuerote", "Río Chico"] },
+      { "name": "Monagas", "cities": ["Maturín", "Punta de Mata", "Caripe", "Caripito", "Temblador", "Caicara de Maturín", "Uracoa", "Jusepín"] },
+      { "name": "Nueva Esparta", "cities": ["Porlamar", "La Asunción", "Pampatar", "Juan Griego", "San Juan Bautista", "Punta de Piedras", "Boca del Río", "El Valle del Espíritu Santo", "El Maco"] },
+      { "name": "Portuguesa", "cities": ["Guanare", "Acarigua", "Araure", "Villa Bruzual", "Biscucuy", "Turén", "Ospino", "Guanarito", "Papelón", "Píritu"] },
+      { "name": "Sucre", "cities": ["Cumaná", "Carúpano", "Güiria", "Cariaco", "Marigüitar", "Cumanacoa", "Araya", "Casanay", "Río Caribe"] },
+      { "name": "Táchira", "cities": ["San Cristóbal", "Táriba", "Rubio", "San Antonio del Táchira", "Ureña", "La Grita", "Michelena", "Colón", "La Fría", "El Cobre", "Capacho", "Bramón", "Abejales"] },
+      { "name": "Trujillo", "cities": ["Trujillo", "Valera", "Boconó", "Pampán", "Escuque", "Carache", "Betijoque", "Sabana de Mendoza", "La Puerta"] },
+      { "name": "La Guaira", "cities": ["La Guaira", "Maiquetía", "Catia La Mar", "Macuto", "Caraballeda", "Naiguatá", "Carayaca", "Urimare", "Carlos Soublette"] },
+      { "name": "Yaracuy", "cities": ["San Felipe", "Yaritagua", "Chivacoa", "Nirgua", "Guama", "Urachiche", "Aroa", "Boraure", "Marín"] },
+      { "name": "Zulia", "cities": ["Maracaibo", "San Francisco", "Cabimas", "Ciudad Ojeda", "Santa Rita", "Machiques", "La Villa del Rosario", "Los Puertos de Altagracia", "Bachaquero", "El Moján", "Caja Seca", "Mene Grande", "Casigua El Cubo", "Encontrados", "Sinamaica", "San Rafael de El Moján", "San Timoteo"] }
+    ]
+  },
+  {
+    "isoCode": "AR",
+    "name": "Argentina",
+    "states": [
+      { "name": "Buenos Aires", "cities": ["La Plata", "Mar del Plata", "Bahía Blanca", "Tandil"] },
+      { "name": "Ciudad Autónoma de Buenos Aires", "cities": ["Buenos Aires"] },
+      { "name": "Córdoba", "cities": ["Córdoba", "Río Cuarto", "Villa María", "Villa Carlos Paz"] },
+      { "name": "Santa Fe", "cities": ["Rosario", "Santa Fe", "Rafaela", "Venado Tuerto"] },
+      { "name": "Mendoza", "cities": ["Mendoza", "San Rafael", "Godoy Cruz", "Luján de Cuyo"] }
+    ]
+  },
+  {
+    "isoCode": "CO",
+    "name": "Colombia",
+    "states": [
+      { "name": "Bogotá D.C.", "cities": ["Bogotá"] },
+      { "name": "Antioquia", "cities": ["Medellín", "Bello", "Itagüí", "Envigado"] },
+      { "name": "Valle del Cauca", "cities": ["Cali", "Buenaventura", "Palmira", "Tulúa"] },
+      { "name": "Atlántico", "cities": ["Barranquilla", "Soledad", "Malambo", "Sabanagrande"] },
+      { "name": "Bolívar", "cities": ["Cartagena", "Magangué", "Turbaco", "Arjona"] }
+    ]
+  },
+  {
+    "isoCode": "CL",
+    "name": "Chile",
+    "states": [
+      { "name": "Región Metropolitana", "cities": ["Santiago", "Puente Alto", "Maipú", "La Florida"] },
+      { "name": "Valparaíso", "cities": ["Viña del Mar", "Valparaíso", "Quilpué", "Villa Alemana"] },
+      { "name": "Biobío", "cities": ["Concepción", "Talcahuano", "Los Ángeles", "San Pedro de la Paz"] },
+      { "name": "Araucanía", "cities": ["Temuco", "Padre Las Casas", "Villarrica", "Angol"] }
+    ]
+  },
+  {
+    "isoCode": "MX",
+    "name": "México",
+    "states": [
+      { "name": "Ciudad de México", "cities": ["Ciudad de México"] },
+      { "name": "Estado de México", "cities": ["Ecatepec", "Nezahualcóyotl", "Naucalpan", "Toluca"] },
+      { "name": "Jalisco", "cities": ["Guadalajara", "Zapopan", "Tlaquepaque", "Tonalá"] },
+      { "name": "Nuevo León", "cities": ["Monterrey", "Guadalupe", "Apodaca", "San Nicolás de los Garza"] }
+    ]
+  },
+  {
+    "isoCode": "ES",
+    "name": "España",
+    "states": [
+      { "name": "Comunidad de Madrid", "cities": ["Madrid", "Móstoles", "Alcalá de Henares", "Fuenlabrada"] },
+      { "name": "Cataluña", "cities": ["Barcelona", "L'Hospitalet de Llobregat", "Badalona", "Terrassa"] },
+      { "name": "Andalucía", "cities": ["Sevilla", "Málaga", "Córdoba", "Granada"] },
+      { "name": "Comunidad Valenciana", "cities": ["Valencia", "Alicante", "Elche", "Castellón de la Plana"] }
+    ]
+  },
+  {
+    "isoCode": "US",
+    "name": "Estados Unidos",
+    "states": [
+      { "name": "New York", "cities": ["New York City", "Buffalo", "Rochester", "Yonkers"] },
+      { "name": "California", "cities": ["Los Angeles", "San Diego", "San Jose", "San Francisco"] },
+      { "name": "Texas", "cities": ["Houston", "San Antonio", "Dallas", "Austin"] },
+      { "name": "Florida", "cities": ["Jacksonville", "Miami", "Tampa", "Orlando"] }
+    ]
+  },
+  {
+    "isoCode": "CA",
+    "name": "Canadá",
+    "states": [
+      { "name": "Ontario", "cities": ["Toronto", "Ottawa", "Mississauga", "Brampton"] },
+      { "name": "Quebec", "cities": ["Montreal", "Quebec City", "Laval", "Gatineau"] },
+      { "name": "British Columbia", "cities": ["Vancouver", "Surrey", "Burnaby", "Richmond"] }
+    ]
+  },
+  {
+    "isoCode": "AU",
+    "name": "Australia",
+    "states": [
+      { "name": "New South Wales", "cities": ["Sydney", "Newcastle", "Wollongong", "Maitland"] },
+      { "name": "Victoria", "cities": ["Melbourne", "Geelong", "Ballarat", "Bendigo"] },
+      { "name": "Queensland", "cities": ["Brisbane", "Gold Coast", "Sunshine Coast", "Townsville"] }
+    ]
+  }
+]

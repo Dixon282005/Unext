@@ -6,9 +6,17 @@ import { Eye, EyeOff, Mail, Lock, User, Building, UserPlus } from 'lucide-react'
 import { signupAction } from '@/features/auth/actions';
 import { useUser } from '@/providers/UserProvider';
 
-export default function Register() {
+export interface RegisterProps {
+  isDark?: boolean;
+  onRegister?: (data: { type: 'student' | 'company', name: string, email: string }) => void;
+  onNavigateToLogin?: () => void;
+  onNavigateToHome?: () => void;
+}
+
+export function Register({ isDark: propIsDark, onRegister, onNavigateToLogin, onNavigateToHome }: RegisterProps) {
   const router = useRouter();
-  const { isDark, loginUser } = useUser();
+  const { isDark: contextIsDark, loginUser } = useUser();
+  const isDark = propIsDark !== undefined ? propIsDark : contextIsDark;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -54,8 +62,12 @@ export default function Register() {
       if (res?.error) {
         setErrorMsg(res.error);
       } else if (res?.success && res.user) {
-        loginUser(res.user.name, res.user.email, formData.userType);
-        router.push('/dashboard');
+        if (onRegister) {
+          onRegister({ type: formData.userType, name: res.user.name, email: res.user.email });
+        } else {
+          loginUser(res.user.name, res.user.email, formData.userType);
+          router.push('/onboarding');
+        }
       }
     } catch (err) {
       setErrorMsg('Ocurrió un error inesperado al registrarse.');
@@ -88,7 +100,7 @@ export default function Register() {
 
       <div className="w-full max-w-sm relative z-10">
         <div className="text-center mb-8">
-          <button onClick={() => router.push('/')} className="inline-block mb-6 hover:opacity-80 transition-opacity">
+          <button onClick={() => onNavigateToHome ? onNavigateToHome() : router.push('/')} className="inline-block mb-6 hover:opacity-80 transition-opacity">
             <span className={`text-xl tracking-tight ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
               U<span className="text-purple-500">next</span>
             </span>
@@ -228,7 +240,7 @@ export default function Register() {
 
           <p className={`text-center text-sm ${isDark ? 'text-[#8A8A8A]' : 'text-gray-500'}`}>
             Ya tienes una cuenta?{' '}
-            <button onClick={() => router.push('/login')} className="text-purple-500 hover:text-purple-400 transition-colors">
+            <button onClick={() => onNavigateToLogin ? onNavigateToLogin() : router.push('/login')} className="text-purple-500 hover:text-purple-400 transition-colors">
               Inicia sesion
             </button>
           </p>
@@ -237,3 +249,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Register;

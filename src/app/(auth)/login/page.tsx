@@ -6,9 +6,17 @@ import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react';
 import { loginAction } from '@/features/auth/actions';
 import { useUser } from '@/providers/UserProvider';
 
-export default function Login() {
+export interface LoginProps {
+  isDark?: boolean;
+  onLogin?: (data: { name: string, email: string }) => void;
+  onNavigateToRegister?: () => void;
+  onNavigateToHome?: () => void;
+}
+
+export function Login({ isDark: propIsDark, onLogin, onNavigateToRegister, onNavigateToHome }: LoginProps) {
   const router = useRouter();
-  const { isDark, loginUser } = useUser();
+  const { isDark: contextIsDark, loginUser } = useUser();
+  const isDark = propIsDark !== undefined ? propIsDark : contextIsDark;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,8 +37,12 @@ export default function Login() {
       if (res?.error) {
         setErrorMsg(res.error);
       } else if (res?.success && res.user) {
-        loginUser(res.user.name, res.user.email, 'student');
-        router.push('/dashboard');
+        if (onLogin) {
+          onLogin({ email: res.user.email, name: res.user.name });
+        } else {
+          loginUser(res.user.name, res.user.email, 'student');
+          router.push('/dashboard');
+        }
       }
     } catch (err) {
       setErrorMsg('Ocurrió un error inesperado al iniciar sesión.');
@@ -60,7 +72,7 @@ export default function Login() {
 
       <div className="w-full max-w-sm relative z-10">
         <div className="text-center mb-8">
-          <button onClick={() => router.push('/')} className="inline-block mb-6 hover:opacity-80 transition-opacity">
+          <button onClick={() => onNavigateToHome ? onNavigateToHome() : router.push('/')} className="inline-block mb-6 hover:opacity-80 transition-opacity">
             <span className={`text-xl tracking-tight ${isDark ? 'text-white' : 'text-[#0A0A0A]'}`}>
               U<span className="text-purple-500">next</span>
             </span>
@@ -134,7 +146,7 @@ export default function Login() {
 
           <p className={`text-center text-sm ${isDark ? 'text-[#8A8A8A]' : 'text-gray-500'}`}>
             No tienes una cuenta?{' '}
-            <button onClick={() => router.push('/register')} className="text-purple-500 hover:text-purple-400 transition-colors">
+            <button onClick={() => onNavigateToRegister ? onNavigateToRegister() : router.push('/register')} className="text-purple-500 hover:text-purple-400 transition-colors">
               Registrate
             </button>
           </p>
@@ -143,3 +155,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;
