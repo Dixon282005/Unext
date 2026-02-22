@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ArrowLeft, Upload, Link as LinkIcon, Check, Building, User, GraduationCap, X } from 'lucide-react';
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput, { getCountryCallingCode } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import careersData from '@/data/careers.json';
 import universitiesData from '@/data/venezuelan-universities.json';
@@ -20,7 +20,7 @@ export interface OnboardingData {
   platformGoal: string | null;
   educationLevel: string;
   institution: string;
-  yearsOfExperience: number | '';
+  yearsOfExperience: string;
   portfolioLink: string;
   file: File | null;
 }
@@ -38,19 +38,25 @@ const profileOptions = [
 
 const platformGoals = {
   student: [
-    'Conectar con reclutadores locales',
-    'Prepararme para el entorno laboral',
-    'Encontrar oportunidades de aprendizaje'
+    'Encontrar pasantías y mi primer empleo formal',
+    'Conectar con mentores y reclutadores de mi sector',
+    'Construir un portafolio visible para empresas',
+    'Participar en proyectos reales y hackathons',
+    'Prepararme para el entorno laboral moderno'
   ],
   professional: [
-    'Acelerar mi crecimiento profesional',
-    'Encontrar posiciones senior o clientes',
-    'Destacar mi portafolio ante empresas'
+    'Acelerar mi crecimiento con puestos de nivel senior o remoto',
+    'Encontrar clientes B2B para mis servicios freelance',
+    'Expandir mi red de contactos y networking',
+    'Posicionarme como líder de opinión en mi industria',
+    'Explorar un cambio radical de carrera o sector'
   ],
   company: [
-    'Publicar vacantes de talento',
-    'Filtrar candidatos con alta precisión',
-    'Construir marca empleadora'
+    'Publicar vacantes y reclutar talento altamente cualificado',
+    'Filtrar candidatos mediante IA y pruebas automatizadas',
+    'Construir y potenciar nuestra marca empleadora',
+    'Encontrar talento joven (pasantías) para formar desde cero',
+    'Conectar con freelancers para proyectos específicos'
   ]
 };
 
@@ -61,6 +67,13 @@ const educationLevels = [
   'Universitario graduado',
   'Maestría / Posgrado',
   'Autodidacta'
+];
+
+const commonSkills = [
+  'JavaScript', 'React', 'Node.js', 'Python', 'TypeScript', 'HTML/CSS', 
+  'Java', 'C#', 'C++', 'SQL', 'NoSQL', 'Git', 'AWS', 'Docker', 'Figma',
+  'Diseño UI/UX', 'Marketing Digital', 'Ventas', 'Liderazgo',
+  'Trabajo en equipo', 'Gestión de proyectos', 'Inglés avanzado'
 ];
 
 export function OnboardingFlow({ onComplete, userName, userType = 'student' }: OnboardingProps) {
@@ -263,7 +276,15 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                       <label className="text-xs text-gray-400 font-medium">País Residencial *</label>
                       <select 
                         value={formData.country}
-                        onChange={(e) => updateData({ country: e.target.value, state: '', city: '' })}
+                        onChange={(e) => {
+                          const newCountry = e.target.value;
+                          updateData({ 
+                            country: newCountry, 
+                            state: '', 
+                            city: '', 
+                            phone: newCountry ? '+' + getCountryCallingCode(newCountry as any) : '' 
+                          });
+                        }}
                         className={`${inputClass} appearance-none cursor-pointer w-full`}
                       >
                         <option value="" disabled className="text-gray-800">Seleccione...</option>
@@ -352,6 +373,7 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                       `}} />
                       <PhoneInput
                         international
+                        countryCallingCodeEditable={false}
                         country={formData.country as any}
                         value={formData.phone}
                         onChange={(value) => updateData({ phone: value || '' })}
@@ -426,15 +448,46 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                       )}
                     </div>
 
-                    <input 
-                      type="text" 
-                      disabled={formData.skills.length >= 3}
-                      placeholder={formData.skills.length >= 3 ? "Límite alcanzado" : "Escriba una habilidad y presione Enter..."}
-                      value={skillInput}
-                      onChange={(e) => setSkillInput(e.target.value)}
-                      onKeyDown={handleAddSkill}
-                      className={`${inputClass} disabled:opacity-50 disabled:cursor-not-allowed`}
-                    />
+                    <div className="relative">
+                      <input 
+                        type="text" 
+                        disabled={formData.skills.length >= 3}
+                        placeholder={formData.skills.length >= 3 ? "Límite alcanzado" : "Escriba una habilidad y presione Enter..."}
+                        value={skillInput}
+                        onChange={(e) => setSkillInput(e.target.value)}
+                        onKeyDown={handleAddSkill}
+                        className={`${inputClass} disabled:opacity-50 disabled:cursor-not-allowed`}
+                      />
+                      {skillInput.length > 0 && formData.skills.length < 3 && (
+                        <div className="absolute z-50 w-full mt-1 bg-[#111] border border-white/10 rounded-lg shadow-xl overflow-hidden max-h-40 overflow-y-auto">
+                          {commonSkills
+                            .filter(s => s.toLowerCase().includes(skillInput.toLowerCase()) && !formData.skills.includes(s))
+                            .map(skill => (
+                              <button
+                                key={skill}
+                                onClick={() => {
+                                  updateData({ skills: [...formData.skills, skill] });
+                                  setSkillInput('');
+                                }}
+                                className="w-full text-left px-4 py-2 hover:bg-white/5 text-sm text-gray-300 transition-colors"
+                              >
+                                {skill}
+                              </button>
+                            ))}
+                          {skillInput.trim().length > 0 && !commonSkills.some(s => s.toLowerCase() === skillInput.toLowerCase()) && (
+                            <button
+                              onClick={() => {
+                                updateData({ skills: [...formData.skills, skillInput.trim()] });
+                                setSkillInput('');
+                              }}
+                              className="w-full text-left px-4 py-2 hover:bg-white/5 text-sm text-purple-400 font-medium transition-colors border-t border-white/5"
+                            >
+                              Añadir "{skillInput.trim()}"
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -507,15 +560,21 @@ export function OnboardingFlow({ onComplete, userName, userType = 'student' }: O
                       </select>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs text-gray-500 uppercase tracking-wider font-medium">Años de Exp.</label>
-                      <input 
-                        type="number" 
-                        min="0"
-                        placeholder="Ej. 2"
+                      <label className="text-xs text-gray-500 uppercase tracking-wider font-medium">Años de carrera / graduado</label>
+                      <select 
                         value={formData.yearsOfExperience}
-                        onChange={(e) => updateData({ yearsOfExperience: e.target.value ? Number(e.target.value) : '' })}
-                        className={inputClass}
-                      />
+                        onChange={(e) => updateData({ yearsOfExperience: e.target.value })}
+                        className={`${inputClass} appearance-none cursor-pointer`}
+                        style={{ WebkitAppearance: 'none' }}
+                      >
+                        <option value="" disabled className="text-gray-800">Seleccionar...</option>
+                        <option value="Actualmente cursando" className="text-gray-800">Actualmente cursando</option>
+                        <option value="Menos de 1 año" className="text-gray-800">Menos de 1 año</option>
+                        <option value="1 a 3 años" className="text-gray-800">1 a 3 años</option>
+                        <option value="3 a 5 años" className="text-gray-800">3 a 5 años</option>
+                        <option value="Más de 5 años" className="text-gray-800">Más de 5 años</option>
+                        <option value="Más de 10 años" className="text-gray-800">Más de 10 años</option>
+                      </select>
                     </div>
                   </div>
 
