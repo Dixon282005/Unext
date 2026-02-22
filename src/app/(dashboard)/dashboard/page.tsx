@@ -16,15 +16,8 @@ import { OpportunitiesPage } from '@/features/dashboard/components/Opportunities
 import { MessagesPage } from '@/features/dashboard/components/MessagesPage';
 import { ProfilePage } from '@/features/dashboard/components/ProfilePage';
 import { SettingsPage } from '@/features/dashboard/components/SettingsPage';
-
-interface DashboardProps {
-  isDark: boolean;
-  setIsDark: (value: boolean) => void;
-  onLogout: () => void;
-  userType: 'student' | 'company';
-  userName?: string;
-  userEmail?: string;
-}
+import { useUser } from '@/providers/UserProvider';
+import { useRouter } from 'next/navigation';
 
 type TabId = 'overview' | 'opportunities' | 'ai' | 'messages' | 'profile' | 'settings';
 
@@ -120,8 +113,9 @@ function CommandPalette({ isDark, open, onClose, onNavigate }: {
 }
 
 // ========== MAIN DASHBOARD ==========
-export function Dashboard({ isDark: _initialDark, setIsDark: _setIsDark, onLogout, userType, userName, userEmail }: DashboardProps) {
-  const [isDark, setIsDark] = useState(true);
+export default function Dashboard() {
+  const { userName, userEmail, userType, logoutUser, isDark, setIsDark } = useUser();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -328,7 +322,7 @@ export function Dashboard({ isDark: _initialDark, setIsDark: _setIsDark, onLogou
                   <button onClick={() => { setActiveTab('settings'); setShowUserMenu(false); }} className={`w-full flex items-center gap-2 text-left px-3 py-2 text-xs ${textMuted} ${hoverBg} transition-colors`}>
                     <Settings className="w-3 h-3" /> Configuración
                   </button>
-                  <button onClick={onLogout} className={`w-full flex items-center gap-2 text-left px-3 py-2 text-xs ${textMuted} ${hoverBg} transition-colors border-t ${border}`}>
+                  <button onClick={() => { setShowUserMenu(false); logoutUser(); router.push('/'); }} className={`w-full flex items-center gap-2 text-left px-3 py-2 text-xs ${textMuted} ${hoverBg} transition-colors border-t ${border}`}>
                     <LogOut className="w-3 h-3" /> Cerrar sesión
                   </button>
                 </div>
@@ -501,7 +495,7 @@ export function Dashboard({ isDark: _initialDark, setIsDark: _setIsDark, onLogou
             {/* ===== SETTINGS ===== */}
             {activeTab === 'settings' && (
               <motion.div key="settings" variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.2 }}>
-                <SettingsPage isDark={isDark} setIsDark={setIsDark} onLogout={onLogout} />
+                <SettingsPage isDark={isDark} setIsDark={setIsDark} onLogout={() => { logoutUser(); router.push('/'); }} />
               </motion.div>
             )}
 
@@ -511,5 +505,3 @@ export function Dashboard({ isDark: _initialDark, setIsDark: _setIsDark, onLogou
     </div>
   );
 }
-
-export default Dashboard;
