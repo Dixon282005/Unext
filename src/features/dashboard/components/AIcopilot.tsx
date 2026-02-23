@@ -52,31 +52,61 @@ export function AICopilot({ isDark, userType }: AICopilotProps) {
         'Las metricas muestran que tus vacantes con descripcion detallada reciben 3x mas aplicaciones. Quieres que te ayude a optimizarlas?',
       ];
 
-  const handleSend = () => {
+ const handleSend = async () => { // 1. Agregamos "async" aquí
     if (!input.trim()) return;
 
+    // Guardamos el mensaje del usuario
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: Date.now(), // Mejor usar Date.now() para evitar IDs duplicados
       role: 'user',
       content: input,
       timestamp: 'Ahora',
     };
 
+    // Actualizamos la UI inmediatamente para que el usuario vea su mensaje
     setMessages(prev => [...prev, userMessage]);
+    const mensajeAEnviar = input; // Guardamos el texto antes de limpiar el input
     setInput('');
-    setIsTyping(true);
+    setIsTyping(true); // Aparecen los puntitos de carga...
 
-    setTimeout(() => {
-      const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+    try {
+      // 2. Llamada real al servidor de Python
+      const response = await fetch('http://127.0.0.1:5000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          // Usamos el userType para separar historiales. 
+          // En producción aquí iría el ID real del usuario de tu base de datos.
+          user_id: userType === 'student' ? 'estudiante_prueba' : 'empresa_prueba', 
+          message: mensajeAEnviar 
+        })
+      });
+
+      const data = await response.json();
+
+      // 3. Creamos el mensaje con la respuesta real de la IA
       const aiMessage: Message = {
-        id: messages.length + 2,
+        id: Date.now() + 1,
         role: 'assistant',
-        content: randomResponse,
+        content: data.reply || "Lo siento, hubo un problema procesando tu mensaje.",
         timestamp: 'Ahora',
       };
+
+      // Lo agregamos a la pantalla
       setMessages(prev => [...prev, aiMessage]);
-      setIsTyping(false);
-    }, 1200);
+
+    } catch (error) {
+      console.error("Error conectando con Python:", error);
+      // Si el servidor de Python está apagado, mostramos este error en el chat
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        role: 'assistant',
+        content: '⚠️ No me pude conectar con el servidor de Unext. Verifica que Python esté corriendo en el puerto 5000.',
+        timestamp: 'Ahora'
+      }]);
+    } finally {
+      setIsTyping(false); // Quitamos los puntitos de carga
+    }
   };
 
   if (!isOpen) {

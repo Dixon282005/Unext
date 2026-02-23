@@ -30,6 +30,19 @@ export function OTPPinInput({ value, onChange }: OTPPinInputProps) {
     if (e.key === 'Backspace' && !value[i] && i > 0) refs[i - 1].current?.focus();
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text');
+    const digits = pasted.replace(/\D/g, '').slice(0, 6).split('');
+    if (digits.length > 0) {
+      const next = [...value];
+      digits.forEach((digit, i) => (next[i] = digit));
+      onChange(next);
+      const lastIndex = Math.min(5, digits.length -1);
+      refs[lastIndex].current?.focus();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center gap-6">
       <label className="text-xs text-gray-500 uppercase tracking-wider font-medium">
@@ -46,10 +59,12 @@ export function OTPPinInput({ value, onChange }: OTPPinInputProps) {
             value={digit}
             onChange={(e) => handleChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(i, e)}
+            onPaste={i === 0 ? handlePaste : undefined}
             onFocus={(e) => e.target.select()}
             className={`w-12 h-14 text-center text-2xl font-bold font-mono rounded-xl border transition-all outline-none ${
               digit
                 ? 'bg-purple-500/15 border-purple-500 text-white'
+                
                 : 'bg-white/5 border-white/15 text-white focus:border-purple-500'
             }`}
           />

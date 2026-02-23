@@ -14,6 +14,9 @@ export interface TalentOnboardingData {
   institution: string;
   yearsOfExperience: string;
   portfolioLink: string;
+  workBudget: string;
+  workSchedule: string;
+  workModality: string;
   file: File | null;
 }
 
@@ -34,6 +37,9 @@ export interface CompanyOnboardingData {
   hiringGoal: string;
   talentTypes: string[];
   linkedinPage: string;
+  workBudget: string;
+  workSchedule: string;
+  workModality: string;
   logoFile: File | null;
 }
 

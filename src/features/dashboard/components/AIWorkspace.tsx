@@ -163,16 +163,44 @@ export function AIWorkspace({ isDark }: AIWorkspaceProps) {
     streamRef.current = window.setTimeout(stream, 400);
   }, []);
 
-  const handleSend = (text?: string) => {
+  const handleSend = async (text?: string) => {
     const msg = text || input.trim();
     if (!msg || isStreaming) return;
 
+    // 1. Mostramos el mensaje del usuario en la pantalla
     const userMsg: Message = { id: Date.now(), role: 'user', content: msg };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
+    
+    // Bloqueamos el input mientras la IA piensa
+    setIsStreaming(true); 
 
-    const response = aiResponses[msg] || aiResponses['default'];
-    simulateStream(response);
+    try {
+      // 2. Llamamos al "Cerebro" de Python
+      const response = await fetch('http://127.0.0.1:5000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          user_id: 'workspace_user', // ID temporal
+          message: msg 
+        })
+      });
+
+      const data = await response.json();
+
+      // 3. ¡Aquí ocurre la magia! 
+      // Le pasamos la respuesta real de Ollama a tu efecto de máquina de escribir
+      // Pasamos false a setIsStreaming para que la función simulateStream tome el control
+      setIsStreaming(false); 
+      simulateStream(data.reply || "Procesamiento completado sin respuesta.");
+
+    } catch (error) {
+      console.error("Error conectando con el servidor local:", error);
+      setIsStreaming(false);
+      
+      // Mensaje de error formateado para tu UI estilo consola
+      simulateStream("`ERROR 500:` Fallo de conexión con el motor de IA local en el puerto 5000. Verifica el servidor Flask.");
+    }
   };
 
   const handleClear = () => {

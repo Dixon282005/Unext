@@ -78,4 +78,30 @@ export const YEARS_OF_EXPERIENCE_OPTIONS = [
   'Más de 10 años',
 ];
 
+export const WORK_MODALITY = [
+  { id: 'remote', label: 'Remoto', desc: '100% desde casa o cualquier lugar' },
+  { id: 'hybrid', label: 'Híbrido', desc: 'Combinación de presencial y remoto' },
+  { id: 'onsite', label: 'Presencial', desc: 'En la oficina o instalación física' },
+];
+
+export const WORK_SCHEDULE = [
+  'Tiempo completo (Full-time)',
+  'Medio tiempo (Part-time)',
+  'Por proyecto / Freelance',
+  'Pasantía / Prácticas',
+  'Flexible / Por horas',
+];
+
+// Talent: expectativa salarial | Company: presupuesto de contratación
+export const WORK_BUDGET_OPTIONS = [
+  'Menos de $500 / mes',
+  '$500 – $1,000 / mes',
+  '$1,000 – $2,000 / mes',
+  '$2,000 – $4,000 / mes',
+  '$4,000 – $8,000 / mes',
+  'Más de $8,000 / mes',
+  'A negociar',
+];
+
 export const OTP_DEMO_CODE = '123456';
+

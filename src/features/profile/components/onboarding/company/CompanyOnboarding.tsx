@@ -18,7 +18,9 @@ const INITIAL_DATA: CompanyOnboardingData = {
   phone: '', website: '',
   sector: '', companySize: '',
   hiringGoal: '', talentTypes: [],
-  linkedinPage: '', logoFile: null,
+  linkedinPage: '',
+  workBudget: '', workSchedule: '', workModality: '',
+  logoFile: null,
 };
 
 interface CompanyOnboardingProps {

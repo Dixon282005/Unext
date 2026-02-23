@@ -20,6 +20,7 @@ const INITIAL_DATA: TalentOnboardingData = {
   skills: [], platformGoal: null,
   educationLevel: '', institution: '',
   yearsOfExperience: '', portfolioLink: '',
+  workBudget: '', workSchedule: '', workModality: '',
   file: null,
 };
 
