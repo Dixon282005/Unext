@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client'; // Importar cliente de browser
 import { Navbar } from './components/landing/Navbar';
 import { Hero } from './components/landing/Hero';
 import { TrustedBy } from './components/landing/TrustedBy';
@@ -23,13 +24,49 @@ import { OnboardingFlow, OnboardingData } from '@/features/profile/components/On
 type Page = 'landing' | 'login' | 'register' | 'onboarding' | 'dashboard';
 
 export default function App() {
-  const router = useRouter(); // Dejado pos si se usa luego, pero ahora manejaremos SPA states
+  const router = useRouter(); 
   
   const [currentPage, setCurrentPage] = useState<Page>('landing');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState<'student' | 'company'>('student');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  // Verificar sesión activa de Supabase al cargar la app
+  useEffect(() => {
+    const checkSession = async () => {
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        setIsAuthenticated(true);
+        setUserName(session.user.user_metadata?.full_name || 'Usuario');
+        setUserEmail(session.user.email || '');
+        setUserType(session.user.user_metadata?.role || 'student');
+        setCurrentPage('dashboard');
+      }
+      setIsInitializing(false);
+    };
+
+    checkSession();
+
+    // Escuchar cambios en la autenticación (ej: cuando el usuario hace login/logout)
+    const supabase = createClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setIsAuthenticated(true);
+        setUserName(session.user.user_metadata?.full_name || 'Usuario');
+        setUserEmail(session.user.email || '');
+        setUserType(session.user.user_metadata?.role || 'student');
+      } else {
+        setIsAuthenticated(false);
+        setCurrentPage('landing');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleLogin = (data: { name: string, email: string }) => {
     setUserName(data.name);
