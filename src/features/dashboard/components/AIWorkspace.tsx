@@ -112,7 +112,7 @@ export function AIWorkspace({ isDark }: AIWorkspaceProps) {
     {
       id: 1,
       role: 'assistant',
-      content: 'Hola Juan. Soy tu asistente de Unext AI. Puedo ayudarte a optimizar tu perfil, prepararte para entrevistas, analizar oportunidades o revisar tus aplicaciones. ¿En qué te puedo ayudar hoy?',
+      content: 'Hola. Soy tu asistente de Unext AI. Puedo ayudarte a optimizar tu perfil, prepararte para entrevistas, analizar oportunidades o revisar tus aplicaciones. ¿En qué te puedo ayudar hoy?',
       actions: ['Optimizar mi perfil', 'Preparar entrevista', 'Análisis de mercado'],
     },
   ]);
@@ -318,7 +318,7 @@ export function AIWorkspace({ isDark }: AIWorkspaceProps) {
                       {msg.content}
                     </div>
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white text-[8px] flex-shrink-0 mt-0.5">
-                      JD
+                      Tú
                     </div>
                   </div>
                 </div>

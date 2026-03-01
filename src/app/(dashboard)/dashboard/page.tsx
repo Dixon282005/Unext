@@ -251,7 +251,7 @@ export function Dashboard({ isDark: propIsDark, setIsDark: propSetIsDark, onLogo
             </button>
             <span className={`text-sm ${textFaint}`}>/</span>
             <span className={`text-xs ${text} truncate max-w-[150px]`}>
-              {userType === 'student' ? (userName || 'Juan Díaz') : (userName || 'Mi Empresa')}
+              {userType === 'student' ? (userName || 'Usuario') : (userName || 'Mi Empresa')}
             </span>
           </div>
 
@@ -331,8 +331,8 @@ export function Dashboard({ isDark: propIsDark, setIsDark: propSetIsDark, onLogo
               {showUserMenu && (
                 <div className={`absolute right-0 mt-1 w-48 rounded-lg border ${border} ${cardBg} overflow-hidden shadow-2xl z-50`} onClick={(e) => e.stopPropagation()}>
                   <div className={`px-3 py-2.5 border-b ${border}`}>
-                    <span className={`text-xs ${text} block truncate`}>{userName || 'Juan Díaz'}</span>
-                    <span className={`text-[10px] ${textFaint} block truncate`}>{userEmail || 'juan@email.com'}</span>
+                    <span className={`text-xs ${text} block truncate`}>{userName || 'Usuario'}</span>
+                    <span className={`text-[10px] ${textFaint} block truncate`}>{userEmail || 'usuario@email.com'}</span>
                   </div>
                   <button onClick={() => { setActiveTab('profile'); setShowUserMenu(false); }} className={`w-full flex items-center gap-2 text-left px-3 py-2 text-xs ${textMuted} ${hoverBg} transition-colors`}>
                     <User className="w-3 h-3" /> Mi Perfil
@@ -376,7 +376,7 @@ export function Dashboard({ isDark: propIsDark, setIsDark: propSetIsDark, onLogo
             {activeTab === 'overview' && (
               <motion.div key="overview" variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.2 }} className="space-y-4">
                 <div className="mb-2">
-                  <h1 className={`text-lg ${text} tracking-tight`}>Buen día, {userName ? userName.split(' ')[0] : 'Juan'}</h1>
+                  <h1 className={`text-lg ${text} tracking-tight`}>Buen día, {userName ? userName.split(' ')[0] : 'Usuario'}</h1>
                   <p className={`text-xs ${textMuted}`}>Aquí tienes un resumen de tu actividad</p>
                 </div>
 
