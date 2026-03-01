@@ -11,6 +11,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  isStreaming?: boolean;
 }
 
 export function AICopilot({ isDark, userType }: AICopilotProps) {
@@ -19,6 +20,7 @@ export function AICopilot({ isDark, userType }: AICopilotProps) {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -52,60 +54,73 @@ export function AICopilot({ isDark, userType }: AICopilotProps) {
         'Las metricas muestran que tus vacantes con descripcion detallada reciben 3x mas aplicaciones. Quieres que te ayude a optimizarlas?',
       ];
 
- const handleSend = async () => { // 1. Agregamos "async" aquí
-    if (!input.trim()) return;
+ const handleSend = async (text?: string) => {
+    const msg = text || input.trim();
+    if (!msg || isStreaming) return;
 
-    // Guardamos el mensaje del usuario
-    const userMessage: Message = {
-      id: Date.now(), // Mejor usar Date.now() para evitar IDs duplicados
-      role: 'user',
-      content: input,
-      timestamp: 'Ahora',
+    // 1. Mostramos el mensaje del usuario
+    const userMsg: Message = { 
+      id: Date.now(), 
+      role: 'user', 
+      content: msg,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-
-    // Actualizamos la UI inmediatamente para que el usuario vea su mensaje
-    setMessages(prev => [...prev, userMessage]);
-    const mensajeAEnviar = input; // Guardamos el texto antes de limpiar el input
+    setMessages(prev => [...prev, userMsg]);
     setInput('');
-    setIsTyping(true); // Aparecen los puntitos de carga...
+    setIsStreaming(true);
+    setIsTyping(true);
+
+    // 2. Creamos la "burbuja" vacía de la IA que se va a ir llenando en vivo
+    const aiMsgId = Date.now() + 1;
+    setMessages(prev => [...prev, { 
+      id: aiMsgId, 
+      role: 'assistant', 
+      content: '', 
+      isStreaming: true,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }]);
 
     try {
-      // 2. Llamada real al servidor de Python
-      const response = await fetch('http://127.0.0.1:5000/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          // Usamos el userType para separar historiales. 
-          // En producción aquí iría el ID real del usuario de tu base de datos.
-          user_id: userType === 'student' ? 'estudiante_prueba' : 'empresa_prueba', 
-          message: mensajeAEnviar 
-        })
+        body: JSON.stringify({ message: msg })
       });
 
-      const data = await response.json();
+      if (!response.body) throw new Error("No hay stream de respuesta");
 
-      // 3. Creamos el mensaje con la respuesta real de la IA
-      const aiMessage: Message = {
-        id: Date.now() + 1,
-        role: 'assistant',
-        content: data.reply || "Lo siento, hubo un problema procesando tu mensaje.",
-        timestamp: 'Ahora',
-      };
+      // 3. Abrimos el "chorro" de datos (Reader)
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let done = false;
 
-      // Lo agregamos a la pantalla
-      setMessages(prev => [...prev, aiMessage]);
+      // 4. Bucle infinito hasta que Gemma termine de hablar
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true });
+          // Inyectamos el texto nuevo a la burbuja que ya existe
+          setMessages(prev => prev.map(m => 
+            m.id === aiMsgId ? { ...m, content: m.content + chunk } : m
+          ));
+        }
+      }
+
+      // 5. Apagamos la animación de escribir cuando termina
+      setMessages(prev => prev.map(m => 
+        m.id === aiMsgId ? { ...m, isStreaming: false } : m
+      ));
 
     } catch (error) {
-      console.error("Error conectando con Python:", error);
-      // Si el servidor de Python está apagado, mostramos este error en el chat
-      setMessages(prev => [...prev, {
-        id: Date.now() + 1,
-        role: 'assistant',
-        content: '⚠️ No me pude conectar con el servidor de Unext. Verifica que Python esté corriendo en el puerto 5000.',
-        timestamp: 'Ahora'
-      }]);
+      console.error("Error en el stream:", error);
+      setMessages(prev => prev.map(m => 
+        m.id === aiMsgId ? { ...m, content: m.content + "\n`[ERROR DE CONEXIÓN]`", isStreaming: false } : m
+      ));
     } finally {
-      setIsTyping(false); // Quitamos los puntitos de carga
+      setIsStreaming(false);
+      setIsTyping(false);
     }
   };
 
@@ -240,7 +255,7 @@ export function AICopilot({ isDark, userType }: AICopilotProps) {
           ).map((action) => (
             <button
               key={action}
-              onClick={() => { setInput(action); }}
+              onClick={() => handleSend(action)}
               className={`px-2 py-1 rounded text-[10px] flex-shrink-0 transition-colors ${
                 isDark
                   ? 'bg-white/[0.04] text-[#8A8A8A] hover:text-white hover:bg-white/[0.08]'
@@ -270,8 +285,8 @@ export function AICopilot({ isDark, userType }: AICopilotProps) {
               } focus:outline-none focus:border-purple-500 transition-colors`}
             />
             <button
-              onClick={handleSend}
-              disabled={!input.trim()}
+              onClick={() => handleSend()}
+              disabled={!input.trim() || isStreaming}
               className="p-2 rounded-lg bg-gradient-to-b from-purple-500 to-purple-600 text-white hover:from-purple-400 hover:to-purple-500 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Send className="w-4 h-4" />

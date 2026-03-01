@@ -167,39 +167,56 @@ export function AIWorkspace({ isDark }: AIWorkspaceProps) {
     const msg = text || input.trim();
     if (!msg || isStreaming) return;
 
-    // 1. Mostramos el mensaje del usuario en la pantalla
+    // 1. Mostramos el mensaje del usuario
     const userMsg: Message = { id: Date.now(), role: 'user', content: msg };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
-    
-    // Bloqueamos el input mientras la IA piensa
-    setIsStreaming(true); 
+    setIsStreaming(true);
+
+    // 2. Creamos la "burbuja" vacía de la IA que se va a ir llenando en vivo
+    const aiMsgId = Date.now() + 1;
+    setMessages(prev => [...prev, { id: aiMsgId, role: 'assistant', content: '', isStreaming: true }]);
 
     try {
-      // 2. Llamamos al "Cerebro" de Python
-      const response = await fetch('http://127.0.0.1:5000/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          user_id: 'workspace_user', // ID temporal
-          message: msg 
-        })
+        body: JSON.stringify({ message: msg })
       });
 
-      const data = await response.json();
+      if (!response.body) throw new Error("No hay stream de respuesta");
 
-      // 3. ¡Aquí ocurre la magia! 
-      // Le pasamos la respuesta real de Ollama a tu efecto de máquina de escribir
-      // Pasamos false a setIsStreaming para que la función simulateStream tome el control
-      setIsStreaming(false); 
-      simulateStream(data.reply || "Procesamiento completado sin respuesta.");
+      // 3. Abrimos el "chorro" de datos (Reader)
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let done = false;
+
+      // 4. Bucle infinito hasta que Gemma termine de hablar
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true });
+          // Inyectamos el texto nuevo a la burbuja que ya existe
+          setMessages(prev => prev.map(m => 
+            m.id === aiMsgId ? { ...m, content: m.content + chunk } : m
+          ));
+        }
+      }
+
+      // 5. Apagamos la animación de escribir cuando termina
+      setMessages(prev => prev.map(m => 
+        m.id === aiMsgId ? { ...m, isStreaming: false } : m
+      ));
 
     } catch (error) {
-      console.error("Error conectando con el servidor local:", error);
+      console.error("Error en el stream:", error);
+      setMessages(prev => prev.map(m => 
+        m.id === aiMsgId ? { ...m, content: m.content + "\n`[ERROR DE CONEXIÓN]`", isStreaming: false } : m
+      ));
+    } finally {
       setIsStreaming(false);
-      
-      // Mensaje de error formateado para tu UI estilo consola
-      simulateStream("`ERROR 500:` Fallo de conexión con el motor de IA local en el puerto 5000. Verifica el servidor Flask.");
     }
   };
 
