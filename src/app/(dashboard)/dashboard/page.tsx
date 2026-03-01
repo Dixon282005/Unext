@@ -525,5 +525,37 @@ export function Dashboard({ isDark: propIsDark, setIsDark: propSetIsDark, onLogo
 }
 
 export default function DashboardPage() {
-  return <Dashboard />;
+  const [sessionUser, setSessionUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { createClient } = await import('@/lib/supabase/client');
+      const supabase = createClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+         router.push('/login');
+      } else {
+         setSessionUser(session.user);
+      }
+      setLoading(false);
+    };
+    fetchSession();
+  }, [router]);
+
+  if (loading || !sessionUser) {
+    return (
+      <div className="min-h-screen bg-[#080808] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  const userType = sessionUser.user_metadata?.role || 'student';
+  const userName = sessionUser.user_metadata?.full_name || sessionUser.email;
+  const userEmail = sessionUser.email;
+
+  return <Dashboard userName={userName} userEmail={userEmail} userType={userType} />;
 }
