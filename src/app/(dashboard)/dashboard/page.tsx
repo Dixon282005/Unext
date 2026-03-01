@@ -557,5 +557,11 @@ export default function DashboardPage() {
   const userName = sessionUser.user_metadata?.full_name || sessionUser.email;
   const userEmail = sessionUser.email;
 
-  return <Dashboard userName={userName} userEmail={userEmail} userType={userType} />;
+  const handleLogout = async () => {
+    const { logoutAction } = await import('@/features/auth/actions');
+    await logoutAction();
+    router.push('/');
+  };
+
+  return <Dashboard userName={userName} userEmail={userEmail} userType={userType} onLogout={handleLogout} />;
 }
